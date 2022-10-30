@@ -1,0 +1,11 @@
+{
+  "rolName": "Отдел кадров",
+  "sectionName": {
+    "struktureOfHEI": "Струтура ВОУ",
+    "employeeInfo": "Сотрудинки",
+    "studentInfo": "Студенты",
+    "archive": "Академичиский архив",
+    "messages": "Собщения"
+  },
+  "pageName": "О ВУЗе"
+}
