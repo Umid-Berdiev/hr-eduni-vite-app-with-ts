@@ -15,6 +15,7 @@ declare module '@vue/runtime-core' {
     EmployeeConnectCard: typeof import('./src/components/cards/EmployeeConnectCard.vue')['default']
     EmployeeFormModal: typeof import('./src/components/modals/EmployeeFormModal.vue')['default']
     EmployeeInfoCard: typeof import('./src/components/cards/EmployeeInfoCard.vue')['default']
+    FacultyFormModal: typeof import('./src/components/modals/FacultyFormModal.vue')['default']
     Footer: typeof import('./src/components/Footer.vue')['default']
     HeiEditFormModal: typeof import('./src/components/modals/HeiEditFormModal.vue')['default']
     HelloI18n: typeof import('./src/components/HelloI18n.vue')['default']

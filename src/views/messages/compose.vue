@@ -122,7 +122,7 @@
         <div class="panel-header">
           <h5 class="card-title">Xabar yaratish</h5>
           <div class="panel-toggles">
-            <router-link to="/messages/messageMyMessages"
+            <router-link to="/messages/index"
               ><button class="btns c-save py-1.5 px-4" type="button">
                 <i class="fa-solid fa-comments me-2"></i>Mening xabarlarim
               </button></router-link

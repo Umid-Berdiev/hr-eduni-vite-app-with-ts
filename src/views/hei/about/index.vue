@@ -1,10 +1,9 @@
 <script setup lang="ts">
   import type { HeiInterface } from "@/utils/interfaces";
   import { ref, reactive } from "vue";
-  import { fetchHeiInfo } from "@/utils/api/otm-structure/otm";
+  import { fetchHeiInfo } from "@/utils/api/hei";
 
   const value2 = ref("");
-  const optionsRegion = ref([]);
   const optionsHeiType = ref([
     { value: "Davlat" },
     { value: "Xorijiy" },
@@ -54,10 +53,6 @@
       </div>
     </div>
     <!-----------START PAGE LIST HEADER TOP ------------------------>
-
-    <!-------START MODAL---------------------------------------->
-    <HeiEditFormModal :hei-data="heiFormData" />
-    <!-------END MODAL---------------------------------------->
 
     <div class="col-xl-12 pb-1">
       <div class="card">
@@ -141,6 +136,10 @@
         </div>
       </div>
     </div>
+
+    <!-------START MODAL---------------------------------------->
+    <HeiEditFormModal :hei-data="heiFormData" @update="fetchData" />
+    <!-------END MODAL---------------------------------------->
   </div>
 </template>
 

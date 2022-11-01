@@ -1,14 +1,21 @@
 <script setup lang="ts">
+  import { useNotyf } from "@/composable/useNotyf";
+  import { regionsList } from "@/utils/api/additional";
+  import { updateHei } from "@/utils/api/hei";
   import type { HeiInterface } from "@/utils/interfaces";
-  import { reactive, ref } from "vue";
+  import { Modal } from "bootstrap";
+  import { onMounted, reactive, ref } from "vue";
+  import { useI18n } from "vue-i18n";
 
   const props = defineProps<{
     heiData: HeiInterface;
   }>();
-
+  const emits = defineEmits(["update"]);
+  const notif = useNotyf();
+  const { t } = useI18n();
   const isLoading = ref(false);
   const errors = reactive({});
-  const optionsRegion = ref([]);
+  const regionOptions = ref([]);
   const optionsHeiType = ref([
     { value: "Davlat" },
     { value: "Xorijiy" },
@@ -24,13 +31,38 @@
     { value: "Boshqa" },
   ]);
 
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
+  onMounted(async () => {
+    const res = await regionsList();
+    regionOptions.value = res.data;
+  });
+
+  const onFinish = async (values: any) => {
+    try {
+      isLoading.value = true;
+      const res = await updateHei(props.heiData.id, {
+        ...props.heiData,
+        code: 100,
+      });
+      notif.success(t("Data_stored_successfully"));
+      emits("update");
+      closeModal();
+    } catch (error) {
+      notif.error(t("Something_went_wrong"));
+    } finally {
+      isLoading.value = false;
+    }
   };
 
   const onFinishFailed = (errorInfo: string) => {
     console.log("Failed:", errorInfo);
   };
+
+  function closeModal() {
+    const modal = Modal.getInstance("#employeeFormModal");
+    modal?.hide();
+    const modalEl = document.querySelector(".modal-backdrop");
+    modalEl?.classList.remove("show");
+  }
 </script>
 
 <template>
@@ -55,7 +87,7 @@
           <a-form
             :model="heiData"
             autocomplete="off"
-            @finish.prevent="onFinish"
+            @finish="onFinish"
             @finishFailed="onFinishFailed"
           >
             <div class="row">
@@ -68,7 +100,7 @@
                   class="select"
                   type="text"
                   v-model:value="heiData.code"
-                  placeholder="{{$t('Hei_code')}}"
+                  :placeholder="$t('Hei_code')"
                   :disabled="true"
                 />
               </div>
@@ -145,7 +177,7 @@
                   class="mb-3"
                   name="heiTelNumber"
                   :rules="[
-                    { required: true, message: $t('Phone_number_required') },
+                    // { required: true, message: $t('Phone_number_required') },
                   ]"
                 >
                   <label for="otm-name-input" class="form-label">{{
@@ -164,7 +196,7 @@
                 <!-- otm stir -->
                 <a-form-item
                   class="mb-3"
-                  name="heiStir"
+                  name="stir"
                   :rules="[{ required: true, message: $t('Stir_required') }]"
                 >
                   <label for="otm-stir-input" class="form-label">{{
@@ -190,16 +222,20 @@
                 }}</label>
                 <a-select
                   v-model:value="heiData.region"
-                  :options="optionsRegion"
+                  :options="regionOptions"
                   show-search
+                  :field-names="{ value: 'id', label: 'name' }"
                 >
                 </a-select>
               </a-form-item>
+
               <!-- otm joylashgan shaxar -->
               <a-form-item
                 class="mb-3 col-md-6"
                 name="city"
-                :rules="[{ required: true, message: $t('City_required') }]"
+                :rules="[
+                  // { required: true, message: $t('City_required') }
+                ]"
               >
                 <label for="otm-city-input" class="form-label"
                   >{{ $t("City") }} <sup>⚬</sup></label
@@ -238,7 +274,9 @@
               <a-form-item
                 class="mb-3"
                 name="email"
-                :rules="[{ required: true, message: $t('Email_required') }]"
+                :rules="[
+                  // { required: true, message: $t('Email_required') }
+                ]"
               >
                 <label for="email-address-input" class="form-label"
                   >{{ $t("Email") }} <sup>⚬</sup></label
@@ -254,10 +292,10 @@
                 class="mb-3"
                 name="bank_details"
                 :rules="[
-                  {
-                    required: true,
-                    message: $t('Bank_details_required'),
-                  },
+                  // {
+                  //   required: true,
+                  //   message: $t('Bank_details_required'),
+                  // },
                 ]"
               >
                 <label for="bank-info-input" class="form-label">{{
@@ -274,10 +312,10 @@
                 class="mb-3"
                 name="akk"
                 :rules="[
-                  {
-                    required: true,
-                    message: $t('Accreditation_info_required'),
-                  },
+                  // {
+                  //   required: true,
+                  //   message: $t('Accreditation_info_required'),
+                  // },
                 ]"
               >
                 <label for="akkreditasiya-info-input" class="form-label"

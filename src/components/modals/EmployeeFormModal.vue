@@ -134,8 +134,6 @@
   });
 
   const onSubmit = async (values: any) => {
-    // console.log("Success:", values);
-    console.log({ formState });
     try {
       isLoading.value = true;
       clearAllErrors();
@@ -177,11 +175,9 @@
   function closeModal() {
     clearAllErrors();
     const modal = Modal.getInstance("#employeeFormModal");
-    console.log({ modal });
     modal?.hide();
     const modalEl = document.querySelector(".modal-backdrop");
     modalEl?.classList.remove("show");
-    // location.reload();
   }
 
   function clearError(field: string) {

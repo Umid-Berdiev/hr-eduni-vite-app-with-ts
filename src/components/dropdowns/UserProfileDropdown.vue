@@ -32,13 +32,13 @@
         <h6 class="mb-0">Jennifer Bennett</h6>
         <p class="mb-0 font-size-11 text-muted">jennifer.bennett@email.com</p>
       </div>
-      <router-link class="dropdown-item" to="/my-profil"
+      <router-link class="dropdown-item" to="/profile"
         ><i
           class="mdi mdi-account-circle text-muted font-size-16 align-middle me-1"
         ></i>
         <span class="align-middle">Profile</span></router-link
       >
-      <router-link class="dropdown-item" to="/messages/messageMyMessages"
+      <router-link class="dropdown-item" to="/messages/index"
         ><i
           class="mdi mdi-message-text-outline text-muted font-size-16 align-middle me-1"
         ></i>

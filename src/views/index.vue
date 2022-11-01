@@ -61,7 +61,7 @@
         >
       </div>
       <div class="col-md-4">
-        <router-link to="/messages/messageMyMessages">
+        <router-link to="/messages/index">
           <div class="card">
             <div class="card-body">
               <div class="card-number"></div>
