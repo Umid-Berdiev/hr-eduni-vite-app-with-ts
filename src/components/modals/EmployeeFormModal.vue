@@ -141,7 +141,7 @@
       const formData = new FormData();
 
       Object.getOwnPropertyNames(formState).forEach((prop) => {
-        if (!["id", "image", "citizenship"].includes(prop))
+        if (!["id", "image", "citizenship", "user_id"].includes(prop))
           formData.append(prop, formState[prop]);
       });
 
@@ -176,8 +176,8 @@
     clearAllErrors();
     const modal = Modal.getInstance("#employeeFormModal");
     modal?.hide();
-    const modalEl = document.querySelector(".modal-backdrop");
-    modalEl?.classList.remove("show");
+    // const modalEl = document.querySelector(".modal-backdrop");
+    // modalEl?.classList.remove("show");
   }
 
   function clearError(field: string) {
@@ -231,7 +231,7 @@
                   }}</label>
                   <a-date-picker
                     v-model:value="formState.passport_date"
-                    value-format="DD-MM-YYYY"
+                    value-format="YYYY-DD-MM"
                     @change="clearError('passport_date')"
                   />
                   <span v-if="errors.passport_date" class="text-danger small">
@@ -322,7 +322,7 @@
                       </label>
                       <a-date-picker
                         v-model:value="formState.birthdate"
-                        value-format="DD-MM-YYYY"
+                        value-format="YYYY-DD-MM"
                         @change="clearError('birthdate')"
                       />
                       <span v-if="errors.birthdate" class="text-danger small">

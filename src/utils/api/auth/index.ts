@@ -2,10 +2,10 @@ import { useApi } from "@/composable/useApi";
 
 const api = useApi();
 
-export async function login(payload:any) {
+export async function login(payload: any) {
   try {
     const { data } = await api({
-      url: `https://api-auth.eduni.uz/api/auth/login`,
+      url: `${import.meta.env.VITE_API_AUTH_URL}/api/auth/login`,
       method: "POST",
       data: payload,
     });
@@ -19,7 +19,7 @@ export async function login(payload:any) {
 export async function logout() {
   try {
     const { data } = await api({
-      url: `https://api-auth.eduni.uz/api/auth/logout`,
+      url: `${import.meta.env.VITE_API_AUTH_URL}/api/auth/logout`,
       method: "POST",
     });
 

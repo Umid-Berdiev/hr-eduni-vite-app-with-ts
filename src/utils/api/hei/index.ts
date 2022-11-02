@@ -14,11 +14,23 @@ export async function fetchHeiInfo() {
   }
 }
 
-export async function updateHei(id, payload) {
+export async function fetchHei() {
   try {
     const { data } = await api({
-      url: `/api/v1/about/edit/${id}`,
-      method: "POST",
+      url: `/api/v1/about`,
+    });
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function updateHei(id: number, payload: any) {
+  try {
+    const { data } = await api({
+      url: `/api/v1/about/${id}`,
+      method: "PUT",
       data: payload,
     });
 

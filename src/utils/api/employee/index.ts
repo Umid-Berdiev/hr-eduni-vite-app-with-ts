@@ -19,7 +19,7 @@ export async function listEmployees(payload) {
   try {
     const { data } = await api({
       url: `/api/v1/employees/list-employees`,
-      method: "POST",
+      method: "GET",
       params: payload,
     });
 
@@ -70,7 +70,7 @@ export async function createEmployee(payload) {
 export async function updateEmployee(id, payload) {
   try {
     const { data } = await api({
-      url: `/api/v1/employees/update-employee/${id}`,
+      url: `/api/v1/employees/update/${id}`,
       method: "POST",
       data: payload,
     });

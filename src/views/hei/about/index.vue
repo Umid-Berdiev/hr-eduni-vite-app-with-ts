@@ -2,23 +2,8 @@
   import type { HeiInterface } from "@/utils/interfaces";
   import { ref, reactive } from "vue";
   import { fetchHeiInfo } from "@/utils/api/hei";
+  import { Modal } from "bootstrap";
 
-  const value2 = ref("");
-  const optionsHeiType = ref([
-    { value: "Davlat" },
-    { value: "Xorijiy" },
-    { value: "Xususiy" },
-    { value: "Qo'shma" },
-    { value: "Boshqa" },
-  ]);
-  const optionsHeiShape = ref([
-    { value: "Institut" },
-    { value: "Universitet" },
-    { value: "Akademiya" },
-    { value: "Filial" },
-    { value: "Boshqa" },
-  ]);
-  const otmKod = "001";
   const heiFormData: HeiInterface = reactive({});
 
   await fetchData();
@@ -26,6 +11,13 @@
   async function fetchData() {
     const res = await fetchHeiInfo();
     Object.assign(heiFormData, res.data);
+  }
+
+  function openHeiEditFormModal() {
+    // data-bs-toggle="modal"
+    // data-bs-target="#heiEditFormModal"
+    const modal = Modal.getOrCreateInstance("#heiEditFormModal");
+    modal.show();
   }
 </script>
 
@@ -41,8 +33,7 @@
               <button
                 type="button"
                 class="btns c-save py-1.5 px-4"
-                data-bs-toggle="modal"
-                data-bs-target="#heiEditFormModal"
+                @click="openHeiEditFormModal"
               >
                 <i class="far fa-edit me-2"></i>
                 {{ $t("Edit") }}
@@ -69,7 +60,7 @@
                 <th>
                   <strong>{{ $t("Title") }}</strong>
                 </th>
-                <td>{{ heiFormData.title }}</td>
+                <td>{{ heiFormData.name }}</td>
               </tr>
               <tr class="table-row-infoUniversity">
                 <th>
@@ -79,9 +70,9 @@
               </tr>
               <tr class="table-row-infoUniversity">
                 <th>
-                  <strong>{{ $t("City") }}</strong>
+                  <strong>{{ $t("District") }}</strong>
                 </th>
-                <td>{{ heiFormData.city }}</td>
+                <td>{{ heiFormData.district }}</td>
               </tr>
               <tr class="table-row-infoUniversity">
                 <th>
@@ -93,7 +84,7 @@
                 <th>
                   <strong>{{ $t("Phone") }}</strong>
                 </th>
-                <td>{{ heiFormData.phone }}</td>
+                <td>{{ heiFormData.contact }}</td>
               </tr>
               <tr class="table-row-infoUniversity">
                 <th>
@@ -105,13 +96,13 @@
                 <th>
                   <strong>{{ $t("Hei_type") }}</strong>
                 </th>
-                <td>{{ heiFormData.hei_type }}</td>
+                <td>{{ heiFormData.university_type }}</td>
               </tr>
               <tr class="table-row-infoUniversity">
                 <th>
-                  <strong>{{ $t("hei_shape") }}</strong>
+                  <strong>{{ $t("Hei_shape") }}</strong>
                 </th>
-                <td>{{ heiFormData.hei_shape }}</td>
+                <td>{{ heiFormData.university_form }}</td>
               </tr>
               <tr class="table-row-infoUniversity">
                 <th>
@@ -123,13 +114,13 @@
                 <th>
                   <strong>{{ $t("Bank_details") }}</strong>
                 </th>
-                <td>{{ heiFormData.bank }}</td>
+                <td>{{ heiFormData.bank_information }}</td>
               </tr>
               <tr class="table-row-infoUniversity">
                 <th>
                   <strong>{{ $t("Accreditation_info") }}</strong>
                 </th>
-                <td>{{ heiFormData.akk }}</td>
+                <td>{{ heiFormData.accriditaion }}</td>
               </tr>
             </table>
           </div>
@@ -138,7 +129,7 @@
     </div>
 
     <!-------START MODAL---------------------------------------->
-    <HeiEditFormModal :hei-data="heiFormData" @update="fetchData" />
+    <HeiEditFormModal @update="fetchData" />
     <!-------END MODAL---------------------------------------->
   </div>
 </template>

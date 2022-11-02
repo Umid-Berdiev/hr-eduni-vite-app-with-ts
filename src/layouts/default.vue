@@ -9,8 +9,8 @@
   document.body.removeAttribute("data-layout");
   const router = useRouter();
   const {
-    topbar,
-    layoutScrollable,
+    // topbar,
+    // layoutScrollable,
     leftSidebarType,
     layoutWidth,
     sidebarColor,
@@ -61,16 +61,13 @@
   <!-- <div> -->
   <!-- Begin page -->
   <div id="layout-wrapper">
-    <Topbar
-      :type="topbar"
-      :layoutscroll="layoutScrollable"
-      @toggle-menu="toggleMenu"
-    />
+    <Topbar @toggle-menu="toggleMenu" />
 
     <SideBar
       :type="leftSidebarType"
       :width="layoutWidth"
       :color="sidebarColor"
+      @toggle-menu="toggleMenu"
     />
     <!-- ============================================================== -->
     <!-- Start right Content here -->

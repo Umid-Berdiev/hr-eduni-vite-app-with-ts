@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import { computed, ref, reactive } from "vue";
   import Swal from "sweetalert2";
   import { fetchList } from "@/utils/api/employee";
@@ -6,8 +6,8 @@
   //select date
   const formState1 = reactive({});
   const formState2 = reactive({});
-  // ------------delete modal oyna--------------------
-  function cancel() {
+
+  function onDelete() {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: "btn btn-success",
@@ -227,7 +227,7 @@
                             <a
                               type="text"
                               data-bs-toggle="modal"
-                              data-bs-target="#myModalEmployees"
+                              data-bs-target="#employeeMiniFormModal"
                             >
                               <i class="bx bx-pencil font-size-18"></i>
                             </a>
@@ -251,7 +251,10 @@
                       </li> -->
                         <li class="list-inline-item">
                           <div class="delete__project">
-                            <a class="text-danger" type="danger" @click="cancel"
+                            <a
+                              class="text-danger"
+                              type="danger"
+                              @click="onDelete"
                               ><i class="bx bx-trash-alt font-size-18"></i
                             ></a>
                           </div>
@@ -311,16 +314,16 @@
 
     <!-------START MODAL---------------------------------------->
     <div
-      id="myModalEmployees"
+      id="employeeMiniFormModal"
       class="modal fade"
       tabindex="-1"
-      aria-labelledby="myModalLabel"
+      aria-labelledby="employeeMiniFormModalLabel"
       aria-hidden="true"
     >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header bg-card-header">
-            <h5 class="modal-title" id="myModalLabel">
+            <h5 class="modal-title" id="employeeMiniFormModalLabel">
               ABDUQODIROV BOBURJON ABDUXALILOVICH
             </h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal">

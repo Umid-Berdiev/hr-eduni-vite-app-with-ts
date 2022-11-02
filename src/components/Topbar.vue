@@ -1,64 +1,70 @@
+<!-- <script lang="ts">
+  document.body.setAttribute("data-topbar", "light");
+  document.body.removeAttribute("data-layout-size", "boxed");
+</script> -->
+
 <script setup lang="ts">
   import { ref, watch } from "vue";
   import { SimpleBar } from "simplebar-vue3";
   import LocaleSwitcher from "./LocaleSwitcher.vue";
   import UserProfileDropdown from "./dropdowns/UserProfileDropdown.vue";
 
-  const props = defineProps({
-    type: {
-      type: String,
-      required: true,
-    },
-    layoutscroll: {
-      type: Boolean,
-      required: true,
-    },
-  });
+  // const props = defineProps({
+  //   type: {
+  //     type: String,
+  //     required: true,
+  //   },
+  //   layoutScrollable: {
+  //     type: Boolean,
+  //     required: true,
+  //   },
+  // });
 
   // const text = ref(null);
   // const flag = ref(null);
   // const value = ref(null);
 
-  watch(
-    () => props.type,
-    function (newVal, oldVal) {
-      if (newVal !== oldVal) {
-        switch (newVal) {
-          case "dark":
-            document.body.setAttribute("data-topbar", "dark");
-            break;
-          case "light":
-            document.body.setAttribute("data-topbar", "light");
-            document.body.removeAttribute("data-layout-size", "boxed");
-            break;
-          default:
-            document.body.setAttribute("data-topbar", "dark");
-            break;
-        }
-      }
-    },
-    { immediate: true }
-  );
+  // watch(
+  //   () => props.type,
+  //   function (newVal, oldVal) {
+  //     if (newVal !== oldVal) {
+  //       switch (newVal) {
+  //         case "dark":
+  //           document.body.setAttribute("data-topbar", "dark");
+  //           break;
+  //         case "light":
+  //           document.body.setAttribute("data-topbar", "light");
+  //           document.body.removeAttribute("data-layout-size", "boxed");
+  //           break;
+  //         default:
+  //           document.body.setAttribute("data-topbar", "dark");
+  //           break;
+  //       }
+  //     }
+  //   },
+  //   { immediate: true }
+  // );
 
-  watch(
-    () => props.layoutscroll,
-    function (newVal, oldVal) {
-      if (newVal !== oldVal) {
-        switch (newVal) {
-          case false:
-            document.body.setAttribute("data-layout-scrollable", "false");
-            break;
-          case true:
-            document.body.setAttribute("data-layout-scrollable", "true");
-            break;
-          default:
-            document.body.setAttribute("data-layout-scrollable", "false");
-            break;
-        }
-      }
-    },
-    { immediate: true }
-  );
+  // watch(
+  //   () => props.layoutScrollable,
+  //   function (newVal, oldVal) {
+  //     if (newVal !== oldVal) {
+  //       switch (newVal) {
+  //         case false:
+  //           document.body.setAttribute("data-layout-scrollable", "false");
+  //           break;
+  //         case true:
+  //           document.body.setAttribute("data-layout-scrollable", "true");
+  //           break;
+  //         default:
+  //           document.body.setAttribute("data-layout-scrollable", "false");
+  //           break;
+  //       }
+  //     }
+  //   },
+  //   { immediate: true }
+  // );
+
   // function toggleRightSidebar() {
   //   this.$parent.toggleRightSidebar();
   // }

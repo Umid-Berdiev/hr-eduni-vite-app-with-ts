@@ -1,44 +1,46 @@
 <script setup lang="ts">
   import { useNotyf } from "@/composable/useNotyf";
   import { districtsList, regionsList } from "@/utils/api/additional";
-  import { updateHei } from "@/utils/api/hei";
+  import {
+    updateHei,
+    fetchHei,
+    universityTypesList,
+    universityFormsList,
+  } from "@/utils/api/hei";
   import type { HeiInterface } from "@/utils/interfaces";
   import { Modal } from "bootstrap";
   import { onMounted, reactive, ref, watch } from "vue";
   import { useI18n } from "vue-i18n";
 
-  const props = defineProps<{
-    heiData: HeiInterface;
-  }>();
+  // const props = defineProps<{
+  //   heiData: HeiInterface;
+  // }>();
   const emits = defineEmits(["update"]);
   const notif = useNotyf();
   const { t } = useI18n();
   const isLoading = ref(false);
+  const heiData: HeiInterface = reactive({
+    name: {
+      uz: "",
+      ru: "",
+      en: "",
+    },
+  });
   const errors = reactive({});
-  const regionOptions = ref([]);
   const districtOptions = ref([]);
-  const optionsHeiType = ref([
-    { value: "Davlat" },
-    { value: "Xorijiy" },
-    { value: "Xususiy" },
-    { value: "Qo'shma" },
-    { value: "Boshqa" },
-  ]);
-  const optionsHeiForm = ref([
-    { value: "Institut" },
-    { value: "Universitet" },
-    { value: "Akademiya" },
-    { value: "Filial" },
-    { value: "Boshqa" },
-  ]);
+  const regionOptions = await regionsList().then((res) => res.data);
+  const optionsHeiType = await universityTypesList().then((res) => res.data);
+  const optionsHeiForm = await universityFormsList().then((res) => res.data);
 
   onMounted(async () => {
-    const res = await regionsList();
-    regionOptions.value = res.data;
+    const res1 = await fetchHei();
+    Object.assign(heiData, res1);
+    // const res2 = await regionsList();
+    // regionOptions.value = res2.data;
   });
 
   watch(
-    () => props.heiData.region,
+    () => heiData.region_id,
     async function (newVal) {
       if (newVal) {
         const res = await districtsList(newVal);
@@ -51,14 +53,7 @@
   const onSubmit = async (values: any) => {
     try {
       isLoading.value = true;
-      const res = await updateHei(props.heiData.id, {
-        ...props.heiData,
-        name: {
-          uz: props.heiData.name_uz,
-          ru: props.heiData.name_ru,
-          en: props.heiData.name_en,
-        },
-      });
+      const res = await updateHei(heiData.id, heiData);
       notif.success(t("Data_stored_successfully"));
       emits("update");
       closeModal();
@@ -69,15 +64,11 @@
     }
   };
 
-  const onFinishFailed = (errorInfo: string) => {
-    console.log("Failed:", errorInfo);
-  };
-
   function closeModal() {
-    const modal = Modal.getInstance("#employeeFormModal");
+    const modal = Modal.getInstance("#heiEditFormModal");
     modal?.hide();
-    const modalEl = document.querySelector(".modal-backdrop");
-    modalEl?.classList.remove("show");
+    // const modalEl = document.querySelector(".modal-backdrop");
+    // modalEl?.classList.remove("show");
   }
 </script>
 
@@ -123,7 +114,7 @@
                 <a-input
                   class="select"
                   type="text"
-                  v-model:value="heiData.name_uz"
+                  v-model:value="heiData.name.uz"
                   :placeholder="$t('Enter_hei_nameuz')"
                 />
               </div>
@@ -134,7 +125,7 @@
                 <a-input
                   class="select"
                   type="text"
-                  v-model:value="heiData.name_ru"
+                  v-model:value="heiData.name.ru"
                   :placeholder="$t('Enter_hei_nameru')"
                 />
               </div>
@@ -145,7 +136,7 @@
                 <a-input
                   class="select"
                   type="text"
-                  v-model:value="heiData.name_en"
+                  v-model:value="heiData.name.en"
                   :placeholder="$t('Enter_hei_nameen')"
                 />
               </div>
@@ -185,7 +176,7 @@
                   $t("Region")
                 }}</label>
                 <a-select
-                  v-model:value="heiData.region"
+                  v-model:value="heiData.region_id"
                   :options="regionOptions"
                   show-search
                   :field-names="{ value: 'id', label: 'name' }"
@@ -199,7 +190,7 @@
                   >{{ $t("District") }} <sup>⚬</sup></label
                 >
                 <a-select
-                  v-model:value="heiData.district"
+                  v-model:value="heiData.district_id"
                   :options="districtOptions"
                   show-search
                   :field-names="{ value: 'id', label: 'name' }"
@@ -215,6 +206,7 @@
                 <a-select
                   v-model:value="heiData.university_type"
                   :options="optionsHeiType"
+                  :field-names="{ value: 'id', label: 'name' }"
                 >
                 </a-select>
               </div>
@@ -226,6 +218,7 @@
                 <a-select
                   v-model:value="heiData.university_form"
                   :options="optionsHeiForm"
+                  :field-names="{ value: 'id', label: 'name' }"
                 >
                 </a-select>
               </div>

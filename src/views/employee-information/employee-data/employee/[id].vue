@@ -9,6 +9,7 @@
   import EmployeeInfoCard from "@/components/cards/EmployeeInfoCard.vue";
   import ChangeAccountFormCard from "@/components/cards/ChangeAccountFormCard.vue";
   import EmployeeConnectCard from "@/components/cards/EmployeeConnectCard.vue";
+  import { Modal } from "bootstrap";
 
   //actions delete
   function deleteAction() {
@@ -361,6 +362,11 @@
       Object.assign(employeeData, res.data);
     }
   });
+
+  function openEmployeeFormModal() {
+    const modal = Modal.getOrCreateInstance("#employeeFormModal");
+    modal.show();
+  }
 </script>
 
 <template>
@@ -385,8 +391,7 @@
             <button
               class="btns c-save py-1.5 px-4 me-3"
               type="button"
-              data-bs-toggle="modal"
-              data-bs-target="#employeeFormModal"
+              @click="openEmployeeFormModal"
             >
               <i class="fa-solid fa-pen-to-square me-2"></i>
               {{ $t("Edit") }}

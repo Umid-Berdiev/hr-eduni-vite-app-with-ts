@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import { computed, ref, reactive } from "vue";
-  import { useRouter } from "vue-router";
   import Swal from "sweetalert2";
+  import { useRouter } from "vue-router";
   import { listEmployees } from "@/utils/api/employee";
   import { changeStatus } from "@/utils/api/employee";
-  import EmployeeFormModal from "@/components/modals/EmployeeFormModal.vue";
+  import { Modal } from "bootstrap";
 
   const router = useRouter();
 
@@ -91,6 +91,11 @@
   async function toggleStatus(id) {
     const res = await changeStatus(id);
   }
+
+  function openEmployeeFormModal() {
+    const modal = Modal.getOrCreateInstance("#employeeFormModal");
+    modal.show();
+  }
 </script>
 
 <template>
@@ -104,8 +109,7 @@
             <button
               class="btns c-save py-1.5 px-4 me-3"
               type="button"
-              data-bs-toggle="modal"
-              data-bs-target="#employeeFormModal"
+              @click="openEmployeeFormModal"
             >
               <i class="fa-solid fa-user-plus me-2"></i>
               {{ $t("Add_employee") }}
@@ -204,21 +208,23 @@
                   <td>{{ element.birthdate }}</td>
                   <td>{{ element.passport_number }}</td>
                   <td>{{ element.updated_at }}</td>
-                  <td>{{ element.work_count }}</td>
+                  <td class="justify-content-end">{{ element.work_count }}</td>
                   <!-- ---------START ACTIONS-------------- -->
-                  <td class="">
-                    <button
-                      class="btn btn-link"
-                      @click="handleEdit(element.id)"
-                    >
-                      <i class="bx bx-pencil font-size-18"></i>
-                    </button>
-                    <button
-                      class="btn btn-link text-danger"
-                      @click="handleDelete(element.id)"
-                    >
-                      <i class="bx bx-trash-alt font-size-18"></i>
-                    </button>
+                  <td class="flex-wrap">
+                    <div class="btn-group">
+                      <button
+                        class="btn btn-sm btn-link"
+                        @click="handleEdit(element.id)"
+                      >
+                        <i class="bx bx-pencil font-size-18"></i>
+                      </button>
+                      <button
+                        class="btn btn-sm btn-link text-danger"
+                        @click="handleDelete(element.id)"
+                      >
+                        <i class="bx bx-trash-alt font-size-18"></i>
+                      </button>
+                    </div>
                   </td>
                   <!-- ---------END ACTIONS-------------- -->
                   <td>

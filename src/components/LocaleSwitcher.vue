@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import { computed, watch } from "vue";
   import { useRouter } from "vue-router";
   import { useI18n } from "vue-i18n";
@@ -17,7 +17,7 @@
   );
 
   const localFlagSrc = computed(() => {
-    return (locale) => {
+    return (locale: string) => {
       switch (locale) {
         case "en":
           return "/src/assets/images/flags/en.jpg";
@@ -30,7 +30,7 @@
     };
   });
 
-  function setLocale(val) {
+  function setLocale(val: string) {
     locale.value = val;
     router.go(0);
   }
