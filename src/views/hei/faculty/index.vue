@@ -62,7 +62,7 @@
                 type="butoon"
                 class="btns c-save py-1.5 px-4"
                 data-bs-toggle="modal"
-                data-bs-target="#myModalFaculty"
+                data-bs-target="#facultyFormModal"
               >
                 <i class="fa-solid fa-plus me-2"></i>
                 <span>Fakultet yaratish</span>
@@ -84,13 +84,20 @@
                   <tr class="table-row-fakulty">
                     <th><strong>#</strong></th>
                     <th>
-                      <a-checkbox v-model:checked1="checked"></a-checkbox>
+                      <strong>{{ $t("Code") }}</strong>
                     </th>
-                    <th><strong>Kodi</strong></th>
-                    <th><strong>Nomi</strong></th>
-                    <th><strong>Turi</strong></th>
-                    <th><strong>Action</strong></th>
-                    <th><strong>Faol</strong></th>
+                    <th>
+                      <strong>{{ $t("Name") }}</strong>
+                    </th>
+                    <th>
+                      <strong>{{ $t("Type") }}</strong>
+                    </th>
+                    <th>
+                      <strong>{{ $t("Action") }}</strong>
+                    </th>
+                    <th>
+                      <strong>{{ $t("Active") }}</strong>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -101,53 +108,26 @@
                       :key="element.id"
                     >
                       <td>{{ element.id }}</td>
-                      <td>
-                        <a-checkbox v-model:checked1="checked"></a-checkbox>
-                      </td>
-                      <td>{{ element.kod }}</td>
+                      <td>{{ element.code }}</td>
                       <td>{{ element.name }}</td>
                       <td>{{ element.type }}</td>
                       <!-- ---------START ACTIONS-------------- -->
-                      <td class="gridjs-td">
-                        <ul class="list-inline mb-0">
-                          <li class="list-inline-item">
-                            <div class="edit__project">
-                              <a
-                                type="text"
-                                data-bs-toggle="modal"
-                                data-bs-target="#myModalFaculty"
-                              >
-                                <i class="bx bx-pencil font-size-18"></i>
-                              </a>
-                            </div>
-                          </li>
-                          <!-- <li class="list-inline-item">
-                          <div class="edit__project">
-                            <router-link to="/marketing/list-project">
-                              <eva-icon
-                                class="icon-md"
-                                style="
-                                  transform: translateY(-7px);
-                                  font-size: 18px;
-                                  line-height: 1;
-                                  color: green;
-                                "
-                                name="eye-outline"
-                              ></eva-icon>
-                            </router-link>
-                          </div>
-                        </li> -->
-                          <li class="list-inline-item">
-                            <div class="delete__project">
-                              <a
-                                class="text-danger"
-                                type="danger"
-                                @click="onRemove"
-                                ><i class="bx bx-trash-alt font-size-18"></i
-                              ></a>
-                            </div>
-                          </li>
-                        </ul>
+                      <td class="">
+                        <button
+                          class="btn btn-link"
+                          data-bs-toggle="modal"
+                          data-bs-target="#facultyFormModal"
+                          @click="selectedId = element.id"
+                        >
+                          <i class="bx bx-pencil font-size-18"></i>
+                        </button>
+                        <button
+                          class="btn btn-link text-danger"
+                          type="danger"
+                          @click="onRemove(element.id)"
+                        >
+                          <i class="bx bx-trash-alt font-size-18"></i>
+                        </button>
                       </td>
                       <!-- ---------END ACTIONS-------------- -->
                       <td>

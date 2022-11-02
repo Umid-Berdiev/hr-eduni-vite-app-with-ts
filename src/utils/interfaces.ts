@@ -39,9 +39,11 @@ export interface EmployeeRoleInterface {
 export interface HeiInterface {
   id: string | number;
   code: string | number;
-  name_uz: string;
-  name_ru: string;
-  name_en: string;
+  name: {
+    uz: string;
+    ru: string;
+    en: string;
+  };
   akk: string;
   phone: string;
   title: string;
@@ -50,8 +52,11 @@ export interface HeiInterface {
   stir: string;
   contact: string;
   rector: string;
-  hei_type: string;
-  hei_shape: string;
   email: string;
   bank: string;
+  district: string;
+  university_type: string;
+  university_form: string;
+  bank_information: string;
+  accriditaion: string;
 }

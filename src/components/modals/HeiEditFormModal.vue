@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import { useNotyf } from "@/composable/useNotyf";
-  import { regionsList } from "@/utils/api/additional";
+  import { districtsList, regionsList } from "@/utils/api/additional";
   import { updateHei } from "@/utils/api/hei";
   import type { HeiInterface } from "@/utils/interfaces";
   import { Modal } from "bootstrap";
-  import { onMounted, reactive, ref } from "vue";
+  import { onMounted, reactive, ref, watch } from "vue";
   import { useI18n } from "vue-i18n";
 
   const props = defineProps<{
@@ -16,6 +16,7 @@
   const isLoading = ref(false);
   const errors = reactive({});
   const regionOptions = ref([]);
+  const districtOptions = ref([]);
   const optionsHeiType = ref([
     { value: "Davlat" },
     { value: "Xorijiy" },
@@ -23,7 +24,7 @@
     { value: "Qo'shma" },
     { value: "Boshqa" },
   ]);
-  const optionsHeiShape = ref([
+  const optionsHeiForm = ref([
     { value: "Institut" },
     { value: "Universitet" },
     { value: "Akademiya" },
@@ -36,12 +37,27 @@
     regionOptions.value = res.data;
   });
 
-  const onFinish = async (values: any) => {
+  watch(
+    () => props.heiData.region,
+    async function (newVal) {
+      if (newVal) {
+        const res = await districtsList(newVal);
+        districtOptions.value = res.data;
+      }
+    },
+    { immediate: true }
+  );
+
+  const onSubmit = async (values: any) => {
     try {
       isLoading.value = true;
       const res = await updateHei(props.heiData.id, {
         ...props.heiData,
-        code: 100,
+        name: {
+          uz: props.heiData.name_uz,
+          ru: props.heiData.name_ru,
+          en: props.heiData.name_en,
+        },
       });
       notif.success(t("Data_stored_successfully"));
       emits("update");
@@ -84,15 +100,10 @@
           </button>
         </div>
         <div class="modal-body">
-          <a-form
-            :model="heiData"
-            autocomplete="off"
-            @finish="onFinish"
-            @finishFailed="onFinishFailed"
-          >
+          <form @submit.prevent="onSubmit">
             <div class="row">
               <!-- ----otm kod---------- -->
-              <div class="mb-3 col-md-6">
+              <div class="col-md-6 mb-3">
                 <label for="otm-kod-input" class="form-label">
                   {{ $t("Code") }}
                 </label>
@@ -105,118 +116,71 @@
                 />
               </div>
 
-              <div class="col-md-6">
-                <a-form-item
-                  class=""
-                  name="name_uz"
-                  :rules="[
-                    {
-                      required: true,
-                      message: $t('Hei_nameuz_required'),
-                    },
-                  ]"
+              <div class="col-md-6 mb-3">
+                <label for="otm-name-input" class="form-label"
+                  >{{ $t("Name_uz") }} <sup>⚬</sup></label
                 >
-                  <label for="otm-name-input" class="form-label"
-                    >{{ $t("Name_uz") }} <sup>⚬</sup></label
-                  >
-                  <a-input
-                    class="select"
-                    type="text"
-                    v-model:value="heiData.name_uz"
-                    :placeholder="$t('Enter_hei_nameuz')"
-                  />
-                </a-form-item>
+                <a-input
+                  class="select"
+                  type="text"
+                  v-model:value="heiData.name_uz"
+                  :placeholder="$t('Enter_hei_nameuz')"
+                />
               </div>
-              <div class="col-md-6">
-                <a-form-item
-                  class=""
-                  name="name_ru"
-                  :rules="[
-                    {
-                      required: true,
-                      message: $t('Hei_nameru_required'),
-                    },
-                  ]"
+              <div class="col-md-6 mb-3">
+                <label for="otm-name-input" class="form-label"
+                  >{{ $t("Name_ru") }} <sup>⚬</sup></label
                 >
-                  <label for="otm-name-input" class="form-label"
-                    >{{ $t("Name_ru") }} <sup>⚬</sup></label
-                  >
-                  <a-input
-                    class="select"
-                    type="text"
-                    v-model:value="heiData.name_ru"
-                    :placeholder="$t('Enter_hei_nameru')"
-                  />
-                </a-form-item>
+                <a-input
+                  class="select"
+                  type="text"
+                  v-model:value="heiData.name_ru"
+                  :placeholder="$t('Enter_hei_nameru')"
+                />
               </div>
-              <div class="col-md-6">
-                <a-form-item
-                  class=""
-                  name="name_en"
-                  :rules="[
-                    {
-                      required: true,
-                      message: $t('Hei_nameen_required'),
-                    },
-                  ]"
+              <div class="col-md-6 mb-3">
+                <label for="otm-name-input" class="form-label"
+                  >{{ $t("Name_en") }} <sup>⚬</sup></label
                 >
-                  <label for="otm-name-input" class="form-label"
-                    >{{ $t("Name_en") }} <sup>⚬</sup></label
-                  >
-                  <a-input
-                    class="select"
-                    type="text"
-                    v-model:value="heiData.name_en"
-                    :placeholder="$t('Enter_hei_nameen')"
-                  />
-                </a-form-item>
+                <a-input
+                  class="select"
+                  type="text"
+                  v-model:value="heiData.name_en"
+                  :placeholder="$t('Enter_hei_nameen')"
+                />
               </div>
               <!-- otm kontakti -->
-              <div class="col-md-6">
-                <a-form-item
-                  class="mb-3"
-                  name="heiTelNumber"
-                  :rules="[
-                    // { required: true, message: $t('Phone_number_required') },
-                  ]"
-                >
-                  <label for="otm-name-input" class="form-label">{{
-                    $t("Phone")
-                  }}</label>
-                  <a-input
-                    class="select"
-                    type="tel"
-                    v-model:value="heiData.phone"
-                    placeholder="+998## ###-##-##"
-                    v-maska="['+998## ###-##-##', '+998## ###-##-##']"
-                  />
-                </a-form-item>
+              <div class="col-md-6 mb-3">
+                <label for="otm-name-input" class="form-label">{{
+                  $t("Phone")
+                }}</label>
+                <a-input
+                  class="select"
+                  type="tel"
+                  v-model:value="heiData.contact"
+                  placeholder="+998## ###-##-##"
+                  v-maska="['+998## ###-##-##', '+998## ###-##-##']"
+                />
               </div>
-              <div class="col-md-6">
+              <div class="col-md-6 mb-3">
                 <!-- otm stir -->
-                <a-form-item
-                  class="mb-3"
-                  name="stir"
-                  :rules="[{ required: true, message: $t('Stir_required') }]"
-                >
-                  <label for="otm-stir-input" class="form-label">{{
-                    $t("STIR")
-                  }}</label>
-                  <a-input
-                    v-model:value="heiData.stir"
-                    type="text"
-                    v-maska="{
-                      mask: '---------',
-                      tokens: { '-': { pattern: /[0-9]/ } },
-                    }"
-                    class="form-control"
-                    :placeholder="$t('Enter_stir')"
-                    id="otm-stir-input"
-                  />
-                </a-form-item>
+                <label for="otm-stir-input" class="form-label">{{
+                  $t("STIR")
+                }}</label>
+                <a-input
+                  v-model:value="heiData.stir"
+                  type="text"
+                  v-maska="{
+                    mask: '---------',
+                    tokens: { '-': { pattern: /[0-9]/ } },
+                  }"
+                  class="form-control"
+                  :placeholder="$t('Enter_stir')"
+                  id="otm-stir-input"
+                />
               </div>
               <!-- otm joylashgan hudud  -->
-              <a-form-item class="mb-3 col-md-6">
+              <div class="col-md-6 mb-3">
                 <label for="fakultet-territoy-input" class="form-label">{{
                   $t("Region")
                 }}</label>
@@ -227,111 +191,81 @@
                   :field-names="{ value: 'id', label: 'name' }"
                 >
                 </a-select>
-              </a-form-item>
+              </div>
 
               <!-- otm joylashgan shaxar -->
-              <a-form-item
-                class="mb-3 col-md-6"
-                name="city"
-                :rules="[
-                  // { required: true, message: $t('City_required') }
-                ]"
-              >
-                <label for="otm-city-input" class="form-label"
-                  >{{ $t("City") }} <sup>⚬</sup></label
+              <div class="col-md-6 mb-3">
+                <label for="otm-district-input" class="form-label"
+                  >{{ $t("District") }} <sup>⚬</sup></label
                 >
-                <a-input
-                  v-model:value="heiData.city"
-                  type="text"
-                  class="form-control"
-                  :placeholder="$t('Enter_city')"
-                  id="otm-city-input"
-                />
-              </a-form-item>
+                <a-select
+                  v-model:value="heiData.district"
+                  :options="districtOptions"
+                  show-search
+                  :field-names="{ value: 'id', label: 'name' }"
+                  :disabled="districtOptions.length === 0"
+                >
+                </a-select>
+              </div>
               <!-- otm turi -->
-              <a-form-item class="mb-3 col-md-6">
+              <div class="col-md-6 mb-3">
                 <label for="fakultet-type-input" class="form-label">
                   {{ $t("Hei_type") }}
                 </label>
                 <a-select
-                  v-model:value="heiData.hei_type"
+                  v-model:value="heiData.university_type"
                   :options="optionsHeiType"
                 >
                 </a-select>
-              </a-form-item>
+              </div>
               <!-- otm shakli -->
-              <a-form-item class="mb-3 col-md-6">
+              <div class="col-md-6 mb-3">
                 <label for="fakultet-shape-input" class="form-label">{{
                   $t("Hei_shape")
                 }}</label>
                 <a-select
-                  v-model:value="heiData.hei_shape"
-                  :options="optionsHeiShape"
+                  v-model:value="heiData.university_form"
+                  :options="optionsHeiForm"
                 >
                 </a-select>
-              </a-form-item>
+              </div>
               <!-- pochta manzili  -->
-              <a-form-item
-                class="mb-3"
-                name="email"
-                :rules="[
-                  // { required: true, message: $t('Email_required') }
-                ]"
-              >
+              <div class="col-md-6 mb-3">
                 <label for="email-address-input" class="form-label"
                   >{{ $t("Email") }} <sup>⚬</sup></label
                 >
-                <a-textarea
+                <a-input
                   v-model:value="heiData.email"
                   :placeholder="$t('Enter_email')"
-                  :auto-size="{ minRows: 3, maxRows: 6 }"
                 />
-              </a-form-item>
+              </div>
               <!-- bank ma'lumotlari -->
-              <a-form-item
-                class="mb-3"
-                name="bank_details"
-                :rules="[
-                  // {
-                  //   required: true,
-                  //   message: $t('Bank_details_required'),
-                  // },
-                ]"
-              >
+              <div class="mb-3">
                 <label for="bank-info-input" class="form-label">{{
                   $t("Bank_details")
                 }}</label>
                 <a-textarea
-                  v-model:value="heiData.bank"
+                  v-model:value="heiData.bank_information"
                   :placeholder="$t('Enter_bank_details')"
                   :auto-size="{ minRows: 3, maxRows: 6 }"
                 />
-              </a-form-item>
+              </div>
               <!-- akkreditatsiya  malumotlari -->
-              <a-form-item
-                class="mb-3"
-                name="akk"
-                :rules="[
-                  // {
-                  //   required: true,
-                  //   message: $t('Accreditation_info_required'),
-                  // },
-                ]"
-              >
+              <div class="mb-3">
                 <label for="akkreditasiya-info-input" class="form-label"
                   >{{ $t("Accreditation_info") }} <sup>⚬</sup></label
                 >
                 <a-textarea
-                  v-model:value="heiData.akk"
+                  v-model:value="heiData.accriditaion"
                   :placeholder="$t('Enter_accreditation_info')"
                   :auto-size="{ minRows: 3, maxRows: 6 }"
                 />
-              </a-form-item>
+              </div>
             </div>
             <div class="d-flex justify-content-end">
               <SubmitButton :loading="isLoading" />
             </div>
-          </a-form>
+          </form>
         </div>
       </div>
     </div>

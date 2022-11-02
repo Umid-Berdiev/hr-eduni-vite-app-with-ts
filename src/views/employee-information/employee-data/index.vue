@@ -208,18 +208,17 @@
                   <!-- ---------START ACTIONS-------------- -->
                   <td class="">
                     <button
-                      class="btn btn-sm btn-link"
+                      class="btn btn-link"
                       @click="handleEdit(element.id)"
                     >
                       <i class="bx bx-pencil font-size-18"></i>
                     </button>
-                    <a
-                      class="text-danger"
-                      type="danger"
+                    <button
+                      class="btn btn-link text-danger"
                       @click="handleDelete(element.id)"
                     >
                       <i class="bx bx-trash-alt font-size-18"></i>
-                    </a>
+                    </button>
                   </td>
                   <!-- ---------END ACTIONS-------------- -->
                   <td>
