@@ -4,7 +4,7 @@ import "notyf/notyf.min.css"; // for React, Vue and Svelte
 
 export const useNotyf = createSharedComposable(() => {
   const notyf = new Notyf({
-    duration: 3000,
+    duration: 5000,
     position: {
       x: "right",
       y: "top",

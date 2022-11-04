@@ -61,6 +61,7 @@
     "vuex": "^4.0.2"
   },
   "devDependencies": {
+    "@iconify/vue": "^4.0.0",
     "@intlify/vite-plugin-vue-i18n": "^6.0.3",
     "@types/bootstrap": "^5.2.5",
     "@types/lodash": "^4.14.186",

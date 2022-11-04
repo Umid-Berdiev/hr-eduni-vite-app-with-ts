@@ -60,3 +60,4 @@ export interface HeiInterface {
   bank_information: string;
   accriditaion: string;
 }
+

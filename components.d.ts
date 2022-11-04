@@ -28,6 +28,7 @@ declare module '@vue/runtime-core' {
     IconTooling: typeof import('./src/components/icons/IconTooling.vue')['default']
     LocaleSwitcher: typeof import('./src/components/LocaleSwitcher.vue')['default']
     PageHeader: typeof import('./src/components/PageHeader.vue')['default']
+    Pagination: typeof import('./src/components/partials/Pagination.vue')['default']
     RightSidebar: typeof import('./src/components/RightSidebar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

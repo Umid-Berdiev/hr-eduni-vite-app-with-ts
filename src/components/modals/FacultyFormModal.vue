@@ -1,29 +1,92 @@
 <script setup lang="ts">
-  import { reactive, ref } from "vue";
+  import { useNotyf } from "@/composable/useNotyf";
+  import {
+    createFaculty,
+    fetchFacultyById,
+    updateFacultyById,
+  } from "@/utils/api/hei/faculty";
+  import { facultyTypeList } from "@/utils/api/hei/faculty";
+  import { Modal } from "bootstrap";
+  import { onMounted, reactive, ref, watchEffect } from "vue";
+  import { useI18n } from "vue-i18n";
 
-  const handleFacultySort = (value) => {
-    console.log(value);
-    // console.log(nameFacultySort);
-  };
-  const optionsFacultySorts = ref([
-    { value: "Maxalliy" },
-    { value: "Qo'shma" },
-    { value: "Bo'lim" },
-    { value: "Boshqa" },
-  ]);
-  const formCreatFaculty = reactive({
-    nameFaculty: "",
-    kodFaculty: "",
-    value: undefined,
+  const props = defineProps({
+    facultyId: null,
+  });
+  
+  const emits = defineEmits<{
+    (e: "update:list"): void;
+  }>();
+
+  const { t } = useI18n();
+  const notif = useNotyf();
+  const isLoading = ref(false);
+
+  const facultyTypeOptions = await facultyTypeList().then((res) => res.data);
+
+  const formData = reactive({
+    name: "",
+    code: "",
+    department_type_id: null,
   });
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const errors = reactive({
+    name: [],
+    code: [],
+    department_type_id: [],
+  });
+
+  watchEffect(async () => {
+    if (props.facultyId) {
+      const res = await fetchFacultyById(props.facultyId);
+      Object.assign(formData, res);
+    }
+  });
+
+  const onFinish = async (values: FormData) => {
+    try {
+      isLoading.value = true;
+      clearErrors();
+      const res = props.facultyId
+        ? await updateFacultyById(props.facultyId, values)
+        : await createFaculty(values);
+      Object.assign(formData, res);
+      notif.success(t("Data_stored_successfully"));
+      emits("update:list");
+      clearFields();
+      closeModal();
+    } catch (error: any) {
+      Object.assign(errors, error.response?.data?.message);
+      notif.error(t("Failed") + ": " + error.message);
+    } finally {
+      isLoading.value = false;
+    }
   };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+  const onFinishFailed = (errorInfo: string) => {
+    console.log({ errorInfo });
   };
+
+  function clearFields() {
+    Object.assign(formData, {
+      name: "",
+      code: "",
+      department_type_id: null,
+    });
+  }
+
+  function clearErrors() {
+    Object.assign(errors, {
+      name: [],
+      code: [],
+      department_type_id: [],
+    });
+  }
+
+  function closeModal() {
+    const modal = Modal.getOrCreateInstance("#facultyFormModal");
+    modal.hide();
+  }
 </script>
 
 <template>
@@ -38,79 +101,96 @@
       <div class="modal-content">
         <div class="modal-header bg-card-header">
           <h5 class="modal-title" id="facultyFormModalLabel">
-            Fakultet yaratish
+            <span>{{ $t("Add_faculty") }}</span>
           </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal">
-            <i class="fa-solid fa-xmark"></i>
+            <VueIconify icon="feather:x" />
           </button>
         </div>
         <div class="modal-body">
           <a-form
-            :model="formCreatFaculty"
-            autocomplete="off"
+            layout="vertical"
+            :model="formData"
             @finish="onFinish"
             @finishFailed="onFinishFailed"
           >
             <a-form-item
               class="mb-3"
-              name="nameFaculty"
+              name="name"
+              :label="$t('Name')"
               :rules="[
-                { required: true, message: `Fakultet nomini kiriting!` },
+                { required: true, message: $t('Faculty_name_required') },
               ]"
             >
-              <label for="fakulty-name-input" class="form-label">Nomi</label>
+              <!-- <label for="fakulty-name-input" class="form-label">Nomi</label> -->
               <a-input
                 type="text"
                 class="select"
-                v-model:value="formCreatFaculty.nameFaculty"
-                placeholder="Fakultet nomini kiriting"
+                v-model:value="formData.name"
+                :placeholder="$t('Enter_faculty_name')"
               />
+              <span v-if="errors.name" class="text-danger small">
+                {{ errors.name[0] }}
+              </span>
             </a-form-item>
 
             <a-form-item
               class="mb-3"
-              name="kodFaculty"
+              name="code"
+              :label="$t('Code')"
               :rules="[
-                { required: true, message: `Fakultet kodini kiriting!` },
+                { required: true, message: $t('Faculty_code_required') },
               ]"
             >
-              <label for="fakulty-kod-input" class="form-label">Kodi</label>
+              <!-- <label for="fakulty-kod-input" class="form-label">Kodi</label> -->
               <a-input
                 type="text"
                 class="select"
-                v-model:value="formCreatFaculty.kodFaculty"
-                placeholder="Fakultet kodini kiriting"
+                v-model:value="formData.code"
+                :placeholder="$t('Enter_faculty_code')"
               />
+              <span v-if="errors.code" class="text-danger small">
+                {{ errors.code[0] }}
+              </span>
             </a-form-item>
 
             <a-form-item
               class="mb-3"
-              name="facultySort"
+              name="department_type_id"
+              :label="$t('Type')"
               :rules="[
-                { required: true, message: `Fakultet kodini kiriting!` },
+                { required: true, message: $t('Faculty_type_required') },
               ]"
             >
-              <label for="fakultet-sort-input" class="form-label">Turi</label>
+              <!-- <label for="fakultet-sort-input" class="form-label">{{
+                $t("Type")
+              }}</label> -->
               <a-select
-                autocomplete="off"
-                v-model:value="formCreatFaculty.facultySort"
-                :options="optionsFacultySorts"
+                v-model:value="formData.department_type_id"
+                :options="facultyTypeOptions"
                 style="width: 100%"
-                @change="handleFacultySort"
-              >
-              </a-select>
+                :field-names="{ value: 'id', label: 'name' }"
+                :placeholder="$t('Enter_faculty_type')"
+              />
+              <span v-if="errors.department_type_id" class="text-danger small">
+                {{ errors.department_type_id[0] }}
+              </span>
             </a-form-item>
 
-            <div class="d-flex justify-content-end">
+            <div class="d-flex justify-content-end gap-2 mt-3">
               <button
                 type="button"
-                class="btns c-cancel me-1"
+                class="btns c-cancel"
                 data-bs-dismiss="modal"
               >
-                Yopish
+                {{ $t("Close") }}
               </button>
-              <button class="btns c-delete me-1">O'chirish</button>
-              <button class="btns c-save" type="submit">Saqlash</button>
+              <button type="button" class="btns c-delete" @click="clearFields">
+                {{ $t("Clear") }}
+              </button>
+              <button type="submit" class="btns c-save">
+                {{ $t("Save") }}
+              </button>
             </div>
           </a-form>
         </div>

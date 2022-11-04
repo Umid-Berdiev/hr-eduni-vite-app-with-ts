@@ -1,10 +1,11 @@
 <script setup lang="ts">
-  import { reactive, ref } from "vue";
+  import { reactive, ref, watch } from "vue";
   import Swal from "sweetalert2";
   import { facultiesList } from "@/utils/api/hei/faculty";
+  import { Modal } from "bootstrap";
+  import Pagination from "@/components/partials/Pagination.vue";
 
-  const nameFaculty = ref("");
-  // const nameFacultySort = ref("");
+  const selectedId = ref<number | null>(null);
 
   //actions delete
   function onRemove() {
@@ -38,14 +39,31 @@
 
   // jadval fakultet
   const apiData = reactive({
+    current_page: 1,
     data: [],
+    links: [],
   });
 
   await fetchList();
 
+  watch(
+    () => apiData.current_page,
+    async (newVal) => {
+      if (Number(newVal)) {
+        await fetchList(Number(newVal));
+      }
+    }
+  );
+
   async function fetchList(page: number = 1) {
-    const res = await facultiesList(page);
+    const res = await facultiesList({ page });
     Object.assign(apiData, res);
+  }
+
+  function openFormModal(id: number | null) {
+    selectedId.value = id;
+    const modal = Modal.getOrCreateInstance("#facultyFormModal");
+    modal.show();
   }
 </script>
 
@@ -55,17 +73,17 @@
     <div class="card panel-header-bg">
       <div class="card-body">
         <div class="panel-header">
-          <h5 class="card-title">Fakultet</h5>
+          <h5 class="card-title">{{ $t("Faculty") }}</h5>
           <div class="panel-toggles">
             <div>
               <button
-                type="butoon"
+                type="button"
                 class="btns c-save py-1.5 px-4"
-                data-bs-toggle="modal"
-                data-bs-target="#facultyFormModal"
+                @click="openFormModal(null)"
               >
-                <i class="fa-solid fa-plus me-2"></i>
-                <span>Fakultet yaratish</span>
+                <!-- <i class="fa-solid fa-plus me-2"></i> -->
+                <VueIconify icon="feather:plus" class="me-2" />
+                <span>{{ $t("Add_faculty") }}</span>
               </button>
             </div>
           </div>
@@ -114,16 +132,15 @@
                       <!-- ---------START ACTIONS-------------- -->
                       <td class="">
                         <button
+                          type="button"
                           class="btn btn-link"
-                          data-bs-toggle="modal"
-                          data-bs-target="#facultyFormModal"
-                          @click="selectedId = element.id"
+                          @click="openFormModal(element.id)"
                         >
                           <i class="bx bx-pencil font-size-18"></i>
                         </button>
                         <button
+                          type="button"
                           class="btn btn-link text-danger"
-                          type="danger"
                           @click="onRemove(element.id)"
                         >
                           <i class="bx bx-trash-alt font-size-18"></i>
@@ -153,34 +170,12 @@
                 </tbody>
               </table>
               <!-------------START PAGINATION-------------->
-              <div v-if="apiData.data.length" class="mt-2">
-                <nav aria-label="...">
-                  <ul class="pagination">
-                    <li class="page-item disabled">
-                      <span class="page-link"
-                        ><i class="mdi mdi-chevron-left"></i
-                      ></span>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item active">
-                      <span class="page-link">
-                        2
-                        <span class="sr-only">(current)</span>
-                      </span>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="#">3</a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="#"
-                        ><i class="mdi mdi-chevron-right"></i
-                      ></a>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
+              <Pagination
+                v-if="apiData.data.length"
+                class="mt-2"
+                v-model:current-page="apiData.current_page"
+                :links="apiData.links"
+              />
               <!-------------END PAGINATION-------------->
             </div>
           </div>
@@ -190,7 +185,7 @@
     <!-------END TABLE---------------------------------------->
 
     <!-------START MODAL---------------------------------------->
-    <FacultyFormModal />
+    <FacultyFormModal :faculty-id="selectedId" @update:list="fetchList" />
     <!-------END MODAL------------------------------------------>
   </div>
 </template>

@@ -5,6 +5,7 @@
   import { listEmployees } from "@/utils/api/employee";
   import { changeStatus } from "@/utils/api/employee";
   import { Modal } from "bootstrap";
+  import Pagination from "@/components/partials/Pagination.vue";
 
   const router = useRouter();
 
@@ -40,7 +41,11 @@
 
   // -------------------ACTION---------------------
 
-  const apiData = reactive({});
+  const apiData = reactive({
+    current_page: 1,
+    data: [],
+    links: [],
+  });
   const isLoading = ref(false);
   const searchInput = ref("");
   const currentPage = computed({
@@ -251,51 +256,12 @@
             </tbody>
           </table>
           <!-- ----------------start pagenation-------------------- -->
-          <div v-if="apiData.data.length" class="mt-2">
-            <nav aria-label="...">
-              <ul class="pagination">
-                <!-- <li class="page-item disabled">
-                    <span class="page-link"
-                      ><i class="mdi mdi-chevron-left"></i
-                    ></span>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">1</a>
-                  </li>
-                  <li class="page-item active">
-                    <span class="page-link">
-                      2
-                      <span class="sr-only">(current)</span>
-                    </span>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">3</a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">4</a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">5</a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">6</a>
-                  </li> -->
-                <li
-                  v-for="link in apiData.links"
-                  :class="[
-                    'page-item',
-                    link.url == null && 'disabled',
-                    link.label == apiData.current_page && 'active',
-                  ]"
-                >
-                  <button class="page-link" @click="currentPage = link.label">
-                    <!-- <i class="mdi mdi-chevron-right"></i> -->
-                    <span v-html="link.label"></span>
-                  </button>
-                </li>
-              </ul>
-            </nav>
-          </div>
+          <Pagination
+            v-if="apiData.data.length"
+            class="mt-2"
+            v-model:current-page="apiData.current_page"
+            :links="apiData.links"
+          />
           <!-- -----------------end-pagenation--------------------- -->
         </div>
       </div>
