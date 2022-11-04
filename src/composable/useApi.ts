@@ -9,7 +9,6 @@ nProgress.configure({ showSpinner: false });
 export function createApi() {
   // Here we set the base URL for all requests made to the api
   api = axios.create({
-    // baseURL: "https://api-hr.eduni.uz",
     baseURL: import.meta.env.VITE_API_BASE_URL,
     // withCredentials: true,
     // headers: {
