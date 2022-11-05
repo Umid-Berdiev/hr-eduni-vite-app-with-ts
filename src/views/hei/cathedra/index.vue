@@ -4,22 +4,29 @@
   import Swal from "sweetalert2";
   import { Modal } from "bootstrap";
   import { useNotyf } from "@/composable/useNotyf";
-  import type { FacultyInterface } from "@/utils/interfaces";
+  import type { CathedraInterface } from "@/utils/interfaces";
   import {
+    cathedrasList,
     facultiesList,
-    removeFacultyById,
-    updateFacultyStatus,
-  } from "@/utils/api/hei/faculty";
+    updateCathedraById,
+  } from "@/utils/api/hei/cathedra";
+  import { deleteDepartment } from "@/utils/api/hei/department";
 
   const selectedId = ref<number | null>(null);
   const { t } = useI18n();
   const notif = useNotyf();
   const isLoading = ref(false);
+  const searchForm = reactive({
+    faculty_id: "",
+    name: "",
+  });
+
+  const facultyOptions = await facultiesList().then((res) => res.data);
 
   // jadval fakultet
   const apiData: {
     current_page: number;
-    data: FacultyInterface[];
+    data: CathedraInterface[];
     links: [];
   } = reactive({
     current_page: 1,
@@ -39,27 +46,14 @@
   );
 
   async function fetchList(page: number = 1) {
-    const res = await facultiesList({ page });
-    Object.assign(apiData, res.data);
+    const res = await cathedrasList({ page });
+    Object.assign(apiData, res);
   }
 
   function openFormModal(id: number | null) {
     selectedId.value = id;
     const modal = Modal.getOrCreateInstance("#facultyFormModal");
     modal.show();
-  }
-
-  async function updateStatus(id: number) {
-    try {
-      isLoading.value = true;
-      await updateFacultyStatus(id);
-      await fetchList();
-      notif.success("Data_stored_successfully");
-    } catch (error: any) {
-      notif.error(error.message);
-    } finally {
-      isLoading.value = false;
-    }
   }
 
   //actions delete
@@ -83,7 +77,7 @@
       });
 
       if (res.isConfirmed) {
-        await removeFacultyById(id);
+        await deleteDepartment(id);
         await fetchList();
 
         swalWithBootstrapButtons.fire(
@@ -104,33 +98,81 @@
   function onModalClose() {
     selectedId.value = null;
   }
+
+  function onSearch() {
+    console.log({ searchForm });
+  }
 </script>
 
 <template>
-  <div class="facultyPage">
+  <div class="departmentPage">
     <!-----------START PAGE LIST HEADER TOP ------------------------>
     <div class="card panel-header-bg">
       <div class="card-body">
         <div class="panel-header">
-          <h5 class="card-title">{{ $t("Faculty") }}</h5>
-          <div class="panel-toggles">
-            <div>
-              <button
-                type="button"
-                class="btns c-save py-1.5 px-4"
-                @click="openFormModal(null)"
-              >
-                <BIcon icon="plus" />
-                <span>{{ $t("Add_faculty") }}</span>
-              </button>
-            </div>
+          <h5 class="card-title">{{ $t("Hei_cathedra") }}</h5>
+          <div class="panel-toggles gap-3">
+            <button
+              type="button"
+              class="btns c-save py-1.5 px-4"
+              @click="openFormModal(null)"
+            >
+              <BIcon icon="plus" />
+              <span>{{ $t("Add_cathedra") }}</span>
+            </button>
+            <button v-b-toggle.collapse-3 class="btns c-filter py-1.5 px-4">
+              <BIcon icon="filter" />
+              <!-- <i class="fa-solid fa-filter me-2"></i> -->
+              {{ $t("Filter") }}
+            </button>
+            <!-- <div class="buttons">
+            </div> -->
+            <!-- <div class="filterBlock">
+            </div> -->
           </div>
         </div>
       </div>
     </div>
     <!-----------START PAGE LIST HEADER TOP ------------------------>
 
-    <div class="row">
+    <!-----------START FILTERS ------------------------>
+    <div class="collapse__block">
+      <b-collapse visible id="collapse-3">
+        <b-card>
+          <form class="row" @submit.prevent="onSearch">
+            <div class="my-2 col-xl-5 form--item">
+              <a-space>
+                <a-select
+                  v-model:value="searchForm.faculty_id"
+                  :options="facultyOptions"
+                  :field-names="{ value: 'id', label: 'name' }"
+                >
+                </a-select>
+              </a-space>
+              <label for="yu">{{ $t("Select_faculty") }}</label>
+            </div>
+            <div class="my-2 col-xl-5 form--item">
+              <a-input
+                id="yu"
+                class="form-control"
+                v-model.value="searchForm.name"
+              />
+              <label for="yu">{{ $t("Search_by_name") }}</label>
+            </div>
+            <div class="my-2 col-xl-2">
+              <button type="submit" class="btn-search search-color">
+                <i class="fa-solid fa-magnifying-glass me-2"></i>
+                {{ $t("Search") }}
+              </button>
+            </div>
+          </form>
+        </b-card>
+      </b-collapse>
+    </div>
+    <!-----------END FILTERS ------------------------>
+
+    <!-------START TABLE---------------------------------------->
+    <div class="row table-division">
       <div class="col-xl-12">
         <div class="card">
           <div class="card-body">
@@ -149,7 +191,7 @@
                       <strong>{{ $t("Name") }}</strong>
                     </th>
                     <th>
-                      <strong>{{ $t("Type") }}</strong>
+                      <strong>{{ $t("Faculty") }}</strong>
                     </th>
                     <th class="text-center">
                       <strong>{{ $t("Action") }}</strong>
@@ -169,7 +211,7 @@
                       <td>{{ element.id }}</td>
                       <td>{{ element.code }}</td>
                       <td>{{ element.name }}</td>
-                      <td>{{ element.type }}</td>
+                      <td>{{ element.faculty }}</td>
                       <!-- ---------START ACTIONS-------------- -->
                       <td class="text-center">
                         <button
@@ -197,7 +239,6 @@
                             type="checkbox"
                             id="flexSwitchCheckChecked"
                             :checked="element.status"
-                            :disabled="isLoading"
                             @change="updateStatus(element.id)"
                           />
                         </div>
@@ -205,12 +246,14 @@
                     </tr>
                   </template>
                   <template v-else>
-                    <div class="py-5">
-                      <h5 class="text-center">{{ $t("No_data") }}</h5>
-                      <p class="text-center">
-                        {{ $t("There_is_no_data_that_match_your_query") }}
-                      </p>
-                    </div>
+                    <tr>
+                      <td colspan="6" class="py-5">
+                        <h5 class="text-center">{{ $t("No_data") }}</h5>
+                        <p class="text-center">
+                          {{ $t("There_is_no_data_that_match_your_query") }}
+                        </p>
+                      </td>
+                    </tr>
                   </template>
                 </tbody>
               </table>
@@ -230,7 +273,7 @@
     <!-------END TABLE---------------------------------------->
 
     <!-------START MODAL---------------------------------------->
-    <FacultyFormModal
+    <CathedraFormModal
       :faculty-id="selectedId"
       @update:list="fetchList"
       @close="onModalClose"
@@ -241,17 +284,21 @@
 
 <style lang="scss">
   // @import "/src/assets/scss/_screenDimensions.scss";
-  // .facultyPage {
-  //   .table-row-fakulty {
-  //     width: 100% !important;
+  // .departmentPage {
+  //   .table-row-division {
   //     display: grid;
+  //     width: 100% !important;
   //     grid-gap: 0;
-  //     grid-template-columns: 50px 40px 100px auto 200px 100px 70px;
+  //     grid-template-columns: 50px 40px 90px auto 300px 80px 60px;
   //     @include mobile() {
-  //       grid-template-columns: 50px 40px 100px 200px auto 80px 60px !important;
+  //       grid-template-columns: 50px 40px 90px 200px auto 80px 60px;
   //     }
   //   }
+  //   .havola:hover {
+  //     cursor: pointer;
+  //   }
   // }
+
   .bg-custom-orange {
     background-color: #e87525;
   }

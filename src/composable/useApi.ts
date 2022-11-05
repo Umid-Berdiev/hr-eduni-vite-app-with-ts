@@ -1,9 +1,10 @@
-import axios, { AxiosInstance } from "axios";
+import axios from "axios";
 import nProgress from "nprogress";
 import { useStorage } from "@vueuse/core";
 import { useUserStore } from "@/stores/user";
 
-let api: AxiosInstance;
+let api: any = null;
+
 nProgress.configure({ showSpinner: false });
 
 export function createApi() {

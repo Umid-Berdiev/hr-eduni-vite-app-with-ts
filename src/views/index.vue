@@ -6,69 +6,72 @@
   <div class="main-menu">
     <div class="row">
       <div class="col-md-4">
-        <router-link to="/employee-information/employee-data">
+        <RouterLink to="/employee-information/employee-data">
           <div class="card">
             <div class="card-body">
               <div class="card-number"></div>
-              <i class="fa-solid fa-address-card fa-5x py-2"></i>
+              <!-- <i class="fa-solid fa-address-card fa-5x py-2"></i> -->
+              <BIcon icon="card-list" size="4rem" />
             </div>
-            <div class="card-footer">Xodimlar bazasi</div>
-          </div></router-link
-        >
+            <div class="card-footer">{{ $t("Employees_base") }}</div>
+          </div>
+        </RouterLink>
       </div>
       <div class="col-md-4">
-        <router-link to="/employee-information/employee-list">
+        <RouterLink to="/employee-information/employee-list">
           <div class="card">
             <div class="card-body">
               <div class="card-number"></div>
               <i class="fa-solid fa-users-between-lines fa-5x py-2"></i>
+              <BIcon icon="person-lines-fill" size="4rem" />
             </div>
-            <div class="card-footer">Xodimlar ro'yxati</div>
-          </div></router-link
+            <div class="card-footer">{{ $t("Employees_list") }}</div>
+          </div></RouterLink
         >
       </div>
       <div class="col-md-4">
-        <router-link to="/employee-information/teacher-list">
+        <RouterLink to="/employee-information/teacher-list">
           <div class="card">
             <div class="card-body">
               <div class="card-number"></div>
-              <i class="fa-solid fa-chalkboard-user fa-5x py-2"></i>
+              <!-- <i class="fa-solid fa-chalkboard-user fa-5x py-2"></i> -->
+              <BIcon icon="person-video3" size="4rem" />
             </div>
-            <div class="card-footer">O'qituvchilar ro'yxati</div>
-          </div></router-link
+            <div class="card-footer">{{ $t("Teachers_list") }}</div>
+          </div></RouterLink
         >
       </div>
       <div class="col-md-4">
-        <router-link to="/student-information/studentList">
+        <RouterLink to="/student-information/studentList">
           <div class="card">
             <div class="card-body">
               <div class="card-number"></div>
               <i class="fa-solid fa-graduation-cap fa-5x py-2"></i>
             </div>
             <div class="card-footer">Talabalar kontengenti</div>
-          </div></router-link
+          </div></RouterLink
         >
       </div>
       <div class="col-md-4">
-        <router-link to="/archive/diplomaList">
+        <RouterLink to="/archive/diplomaList">
           <div class="card">
             <div class="card-body">
               <div class="card-number"></div>
               <i class="fa-solid fa-rectangle-list fa-5x py-2"></i>
             </div>
             <div class="card-footer">Diplomlar ro'yxati</div>
-          </div></router-link
+          </div></RouterLink
         >
       </div>
       <div class="col-md-4">
-        <router-link to="/messages/index">
+        <RouterLink to="/messages/index">
           <div class="card">
             <div class="card-body">
               <div class="card-number"></div>
               <i class="fa-solid fa-comments fa-5x py-2"></i>
             </div>
             <div class="card-footer">Mening xabarlarim</div>
-          </div></router-link
+          </div></RouterLink
         >
       </div>
     </div>

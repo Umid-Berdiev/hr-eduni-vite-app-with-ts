@@ -3,7 +3,7 @@
   import { useUserStore } from "@/stores/user";
 
   const router = useRouter();
-  const { logoutUser } = useUserStore();
+  const { logoutUser, getUser } = useUserStore();
 
   async function logout() {
     await logoutUser();
@@ -29,8 +29,12 @@
     </button>
     <div class="dropdown-menu dropdown-menu-end pt-0">
       <div class="p-3 border-bottom">
-        <h6 class="mb-0">Jennifer Bennett</h6>
-        <p class="mb-0 font-size-11 text-muted">jennifer.bennett@email.com</p>
+        <h6 class="mb-0">
+          {{ getUser?.fullname }}
+        </h6>
+        <p class="mb-0 font-size-11 text-muted">
+          {{ getUser?.email }}
+        </p>
       </div>
       <router-link class="dropdown-item" to="/profile"
         ><i

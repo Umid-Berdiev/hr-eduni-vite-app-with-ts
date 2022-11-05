@@ -32,11 +32,25 @@
   const optionsHeiType = await universityTypesList().then((res) => res.data);
   const optionsHeiForm = await universityFormsList().then((res) => res.data);
 
+  // Promise.all([
+  //   await regionsList(),
+  //   await universityTypesList(),
+  //   await universityFormsList(),
+  // ]).then(function (results) {
+  //   regionOptions.value = results[0];
+  //   optionsHeiType.value = results[1];
+  //   optionsHeiForm.value = results[2];
+  // });
+
   onMounted(async () => {
     const res1 = await fetchHei();
     Object.assign(heiData, res1);
-    // const res2 = await regionsList();
-    // regionOptions.value = res2.data;
+    // const regions = await regionsList();
+    // regionOptions.value = regions;
+    // const universityTypes = await universityTypesList();
+    // optionsHeiType.value = universityTypes;
+    // const universityForms = await universityFormsList();
+    // optionsHeiForm.value = universityForms;
   });
 
   watch(

@@ -273,12 +273,12 @@
                 <li>
                   <RouterLink
                     class="side-nav-link-ref"
-                    to="/hei/department"
+                    to="/hei/cathedra"
                     data-key="t-sass"
                   >
                     <!-- <i class="fa-solid fa-circle-dot"></i> -->
                     <BIcon icon="circle" size=".75rem" />
-                    {{ $t("Hei_department") }}
+                    {{ $t("Hei_cathedra") }}
                   </RouterLink>
                 </li>
                 <li>

@@ -50,7 +50,7 @@ declare module 'vue-router/auto/routes' {
     '/employee-information/scientific-status/': RouteRecordInfo<'/employee-information/scientific-status/', '/employee-information/scientific-status', Record<never, never>, Record<never, never>>,
     '/employee-information/teacher-list/': RouteRecordInfo<'/employee-information/teacher-list/', '/employee-information/teacher-list', Record<never, never>, Record<never, never>>,
     '/hei/about/': RouteRecordInfo<'/hei/about/', '/hei/about', Record<never, never>, Record<never, never>>,
-    '/hei/department/': RouteRecordInfo<'/hei/department/', '/hei/department', Record<never, never>, Record<never, never>>,
+    '/hei/cathedra/': RouteRecordInfo<'/hei/cathedra/', '/hei/cathedra', Record<never, never>, Record<never, never>>,
     '/hei/department-template/': RouteRecordInfo<'/hei/department-template/', '/hei/department-template', Record<never, never>, Record<never, never>>,
     '/hei/division/': RouteRecordInfo<'/hei/division/', '/hei/division', Record<never, never>, Record<never, never>>,
     '/hei/faculty/': RouteRecordInfo<'/hei/faculty/', '/hei/faculty', Record<never, never>, Record<never, never>>,

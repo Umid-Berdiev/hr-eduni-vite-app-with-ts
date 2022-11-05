@@ -17,7 +17,7 @@ export interface EmployeeInterface {
   email: string;
   phone: string;
   work_count: string;
-  status: string;
+  status: boolean;
   country_id: string;
   region_id: string;
   district_id: string;
@@ -61,4 +61,32 @@ export interface HeiInterface {
   university_form: string;
   bank_information: string;
   accriditaion: string;
+}
+
+export interface FacultyInterface {
+  code: string | number;
+  department_type_id: string;
+  id: string | number;
+  name: {
+    uz: string;
+    ru: string;
+    en: string;
+  };
+  status: boolean;
+  type: string;
+}
+
+export interface CathedraInterface {
+  code: string | number;
+  department_type_id: string | number;
+  faculty_id: string | number;
+  faculty: string;
+  id: string | number;
+  name: {
+    uz: string;
+    ru: string;
+    en: string;
+  };
+  status: boolean;
+  type: string;
 }

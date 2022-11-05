@@ -20,12 +20,12 @@ export const useUserStore = defineStore("user", () => {
   const isLoggedIn = computed(
     () => token.value !== undefined && token.value !== ""
   );
-  const getUser = computed(() => user);
+  const getUser = computed(() => user.value);
   const getToken = computed(() => token.value);
   const userRoleID = computed(() => user.value?.role_id);
 
   function setUser(newUser: UserData) {
-    Object.assign(user, newUser);
+    user.value = newUser;
   }
 
   function setToken(newToken: string) {
@@ -54,7 +54,7 @@ export const useUserStore = defineStore("user", () => {
   async function fetchProfile() {
     try {
       const res = await getProfile();
-      setUser(res.data);
+      setUser(res);
     } catch (error) {
       throw error;
     }

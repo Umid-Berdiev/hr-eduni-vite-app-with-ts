@@ -17,7 +17,7 @@ export async function rolesList() {
 export async function getProfile() {
   try {
     const { data } = await api({
-      url: `/api/v1/users/get-profile`,
+      url: `/api/v1/users/profile`,
     });
 
     return data;

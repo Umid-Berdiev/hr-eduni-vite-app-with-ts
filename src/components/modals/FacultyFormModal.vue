@@ -4,8 +4,8 @@
     createFaculty,
     fetchFacultyById,
     updateFacultyById,
+    facultyTypesList,
   } from "@/utils/api/hei/faculty";
-  import { facultyTypesList } from "@/utils/api/hei/faculty";
   import { Modal } from "bootstrap";
   import { onMounted, reactive, ref, watchEffect } from "vue";
   import { useI18n } from "vue-i18n";
@@ -16,6 +16,7 @@
 
   const emits = defineEmits<{
     (e: "update:list"): void;
+    (e: "close"): void;
   }>();
 
   const { t } = useI18n();
@@ -86,6 +87,7 @@
     const modal = Modal.getOrCreateInstance("#facultyFormModal");
     clearFields();
     clearErrors();
+    emits("close");
     modal.hide();
   }
 </script>
@@ -104,11 +106,7 @@
           <h5 class="modal-title" id="facultyFormModalLabel">
             <span>{{ $t("Add_faculty") }}</span>
           </h5>
-          <button
-            type="button"
-            class="btn btn-sm btn-link"
-            data-bs-dismiss="modal"
-          >
+          <button type="button" class="btn btn-sm btn-link" @click="closeModal">
             <BIcon icon="x-lg" color="white" />
             <!-- <i class="bi bi-x"></i> -->
           </button>
@@ -184,11 +182,7 @@
             </a-form-item>
 
             <div class="d-flex justify-content-end gap-2 mt-3">
-              <button
-                type="button"
-                class="btns c-cancel"
-                data-bs-dismiss="modal"
-              >
+              <button type="button" class="btns c-cancel" @click="closeModal">
                 {{ $t("Close") }}
               </button>
               <button type="button" class="btns c-delete" @click="clearFields">

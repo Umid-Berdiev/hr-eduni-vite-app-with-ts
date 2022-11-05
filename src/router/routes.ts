@@ -39,9 +39,9 @@ export default [
         // },
       },
       {
-        path: "/hei/department",
-        name: "hei-department",
-        component: () => import("@/views/hei/department/index.vue"), // Kafedra
+        path: "/hei/cathedra",
+        name: "hei-cathedra",
+        component: () => import("@/views/hei/cathedra/index.vue"), // Kafedra
         // meta: {
         //   requiresAuth: true,
         // },
