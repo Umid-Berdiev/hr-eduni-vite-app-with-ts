@@ -3,6 +3,7 @@
   import MetisMenu from "metismenujs/dist/metismenujs";
   import { SimpleBar } from "simplebar-vue3";
   import { useRoute } from "vue-router";
+  import BIcon from "./icons/BIcon.vue";
 
   const props = defineProps({
     isCondensed: {
@@ -240,10 +241,11 @@
             <!-- --------------------START OTM STRUKTURASI--------------------- -->
             <li>
               <a href="javascript: void(0);" class="has-arrow">
-                <i class="fa-solid fa-building-columns"></i>
-                <span class="menu-item" data-key="t-dashboards">{{
-                  $t("sectionName.struktureOfHEI")
-                }}</span>
+                <!-- <i class="fa-solid fa-building-columns"></i> -->
+                <BIcon icon="building" />
+                <span class="menu-item" data-key="t-dashboards">
+                  {{ $t("sectionName.struktureOfHEI") }}
+                </span>
               </a>
               <ul class="sub-menu" aria-expanded="false">
                 <li>
@@ -252,7 +254,8 @@
                     to="/hei/about"
                     data-key="t-about"
                   >
-                    <i class="fa-solid fa-circle-dot fa-1"></i>
+                    <!-- <i class="fa-solid fa-circle-dot fa-1"></i> -->
+                    <BIcon icon="circle" size=".75rem" />
                     {{ $t("About_hei") }}
                   </RouterLink>
                 </li>
@@ -262,7 +265,8 @@
                     to="/hei/faculty"
                     data-key="t-saas"
                   >
-                    <i class="fa-solid fa-circle-dot"></i>
+                    <!-- <i class="fa-solid fa-circle-dot"></i> -->
+                    <BIcon icon="circle" size=".75rem" />
                     {{ $t("Faculty") }}
                   </RouterLink>
                 </li>
@@ -272,7 +276,8 @@
                     to="/hei/department"
                     data-key="t-sass"
                   >
-                    <i class="fa-solid fa-circle-dot"></i>
+                    <!-- <i class="fa-solid fa-circle-dot"></i> -->
+                    <BIcon icon="circle" size=".75rem" />
                     {{ $t("Hei_department") }}
                   </RouterLink>
                 </li>
@@ -282,7 +287,8 @@
                     to="/hei/division"
                     data-key="t-sass"
                   >
-                    <i class="fa-solid fa-circle-dot"></i>
+                    <!-- <i class="fa-solid fa-circle-dot"></i> -->
+                    <BIcon icon="circle" size=".75rem" />
                     {{ $t("Hei_division") }}
                   </RouterLink>
                 </li>
@@ -293,10 +299,11 @@
             <!-- --------------------START XODIMLAR--------------------- -->
             <li>
               <a href="javascript: void(0);" class="has-arrow">
-                <i class="fa-solid fa-briefcase"></i>
-                <span class="menu-item" data-key="t-employee-information">{{
-                  $t("sectionName.employeeInfo")
-                }}</span>
+                <!-- <i class="fa-solid fa-briefcase"></i> -->
+                <BIcon icon="briefcase" />
+                <span class="menu-item" data-key="t-employee-information">
+                  {{ $t("sectionName.employeeInfo") }}
+                </span>
               </a>
               <ul class="sub-menu" aria-expanded="false">
                 <li>
@@ -305,7 +312,8 @@
                     to="/employee-information/employee-data"
                     data-key="t-employee-data"
                   >
-                    <i class="fa-solid fa-circle-dot"></i>
+                    <!-- <i class="fa-solid fa-circle-dot"></i> -->
+                    <BIcon icon="circle" size=".75rem" />
                     {{ $t("Employees_base") }}
                   </RouterLink>
                 </li>
@@ -315,7 +323,8 @@
                     to="/employee-information/employee-list"
                     data-key="t-employee-list"
                   >
-                    <i class="fa-solid fa-circle-dot"></i>
+                    <!-- <i class="fa-solid fa-circle-dot"></i> -->
+                    <BIcon icon="circle" size=".75rem" />
                     {{ $t("Employees_list") }}
                   </RouterLink>
                 </li>
@@ -325,7 +334,8 @@
                     to="/employee-information/teacher-list"
                     data-key="t-teacher-list"
                   >
-                    <i class="fa-solid fa-circle-dot"></i>
+                    <!-- <i class="fa-solid fa-circle-dot"></i> -->
+                    <BIcon icon="circle" size=".75rem" />
                     {{ $t("Teacher_list") }}
                   </RouterLink>
                 </li>
@@ -335,7 +345,8 @@
                     to="/employee-information/employee-status"
                     data-key="t-employee-status"
                   >
-                    <i class="fa-solid fa-circle-dot"></i>
+                    <!-- <i class="fa-solid fa-circle-dot"></i> -->
+                    <BIcon icon="circle" size=".75rem" />
                     {{ $t("Employees_status") }}
                   </RouterLink>
                 </li>
@@ -345,7 +356,8 @@
                     to="/employee-information/scientific-status"
                     data-key="t-scientific-status"
                   >
-                    <i class="fa-solid fa-circle-dot"></i>
+                    <!-- <i class="fa-solid fa-circle-dot"></i> -->
+                    <BIcon icon="circle" size=".75rem" />
                     {{ $t("Scientific_status") }}
                   </RouterLink>
                 </li>
@@ -355,7 +367,8 @@
                     to="/employee-information/foreign-training"
                     data-key="t-foreign-training"
                   >
-                    <i class="fa-solid fa-circle-dot"></i>
+                    <!-- <i class="fa-solid fa-circle-dot"></i> -->
+                    <BIcon icon="circle" size=".75rem" />
                     {{ $t("Foreign_training") }}
                   </RouterLink>
                 </li>
@@ -365,7 +378,8 @@
                     to="/employee-information/foreign-professor"
                     data-key="t-foreign-professor"
                   >
-                    <i class="fa-solid fa-circle-dot"></i>
+                    <!-- <i class="fa-solid fa-circle-dot"></i> -->
+                    <BIcon icon="circle" size=".75rem" />
                     {{ $t("Foreign_teachers") }}
                   </RouterLink>
                 </li>
@@ -376,10 +390,11 @@
             <!-- --------------------START TALABALAR--------------------- -->
             <li>
               <a href="javascript: void(0);" class="has-arrow">
-                <i class="fa-solid fa-user-group"></i>
-                <span class="menu-item" data-key="t-invoices">{{
-                  $t("sectionName.studentInfo")
-                }}</span>
+                <!-- <i class="fa-solid fa-user-group"></i> -->
+                <BIcon icon="people" />
+                <span class="menu-item" data-key="t-invoices">
+                  {{ $t("sectionName.studentInfo") }}
+                </span>
               </a>
               <ul class="sub-menu" aria-expanded="false">
                 <li>
@@ -388,7 +403,8 @@
                     to="/students/index"
                     data-key="t-invoice-list"
                   >
-                    <i class="fa-solid fa-circle-dot"></i>
+                    <!-- <i class="fa-solid fa-circle-dot"></i> -->
+                    <BIcon icon="circle" size=".75rem" />
                     {{ $t("Students_contengent") }}
                   </RouterLink>
                 </li>
@@ -399,10 +415,11 @@
             <!-- --------------------START Akademik arxiv--------------------- -->
             <li>
               <a href="javascript: void(0);" class="has-arrow">
-                <i class="fa-solid fa-box-archive"></i>
-                <span class="menu-item" data-key="t-contacts">{{
-                  $t("sectionName.archive")
-                }}</span>
+                <!-- <i class="fa-solid fa-box-archive"></i> -->
+                <BIcon icon="archive" />
+                <span class="menu-item" data-key="t-contacts">
+                  {{ $t("sectionName.archive") }}</span
+                >
               </a>
               <ul class="sub-menu" aria-expanded="false">
                 <li>
@@ -411,7 +428,8 @@
                     to="/archive/diplomas"
                     data-key="t-user-grid"
                   >
-                    <i class="fa-solid fa-circle-dot"></i>
+                    <!-- <i class="fa-solid fa-circle-dot"></i> -->
+                    <BIcon icon="circle" size=".75rem" />
                     {{ $t("Diplomas_list") }}
                   </RouterLink>
                 </li>
@@ -421,7 +439,8 @@
                     to="/archive/circulation-sheet"
                     data-key="t-user-list"
                   >
-                    <i class="fa-solid fa-circle-dot"></i>
+                    <!-- <i class="fa-solid fa-circle-dot"></i> -->
+                    <BIcon icon="circle" size=".75rem" />
                     {{ $t("Turnover_sheet") }}
                   </RouterLink>
                 </li>
@@ -432,20 +451,32 @@
             <!-- --------------------START xabarlar--------------------- -->
             <li>
               <a href="javascript: void(0);" class="has-arrow">
-                <i class="fa-solid fa-envelope"></i>
-                <span class="menu-item" data-key="t-messages">{{
-                  $t("sectionName.messages")
-                }}</span>
+                <!-- <i class="fa-solid fa-envelope"></i> -->
+                <BIcon icon="envelope" />
+                <span class="menu-item" data-key="t-messages">
+                  {{ $t("sectionName.messages") }}
+                </span>
               </a>
               <ul class="sub-menu" aria-expanded="false">
-                <!-- <li><RouterLink class="side-nav-link-ref" to="/messages/grid" data-key="t-p-grid"><i class="fa-solid fa-circle-dot"></i>Barcha xabarlar</RouterLink></li> -->
+                <li>
+                  <RouterLink
+                    class="side-nav-link-ref"
+                    to="/messages/grid"
+                    data-key="t-p-grid"
+                  >
+                    <!-- <i class="fa-solid fa-circle-dot"></i> -->
+                    <BIcon icon="circle" size=".75rem" />
+                    {{ $t("All_messages") }}
+                  </RouterLink>
+                </li>
                 <li>
                   <RouterLink
                     class="side-nav-link-ref"
                     to="/messages/index"
                     data-key="t-p-messageMyMessages"
                   >
-                    <i class="fa-solid fa-circle-dot"></i>
+                    <!-- <i class="fa-solid fa-circle-dot"></i> -->
+                    <BIcon icon="circle" size=".75rem" />
                     {{ $t("My_messages") }}
                   </RouterLink>
                 </li>
@@ -455,7 +486,8 @@
                     to="/messages/compose"
                     data-key="t-message-compose-new"
                   >
-                    <i class="fa-solid fa-circle-dot"></i>
+                    <!-- <i class="fa-solid fa-circle-dot"></i> -->
+                    <BIcon icon="circle" size=".75rem" />
                     {{ $t("Compose_message") }}
                   </RouterLink>
                 </li>

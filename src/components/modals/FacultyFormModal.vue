@@ -5,7 +5,7 @@
     fetchFacultyById,
     updateFacultyById,
   } from "@/utils/api/hei/faculty";
-  import { facultyTypeList } from "@/utils/api/hei/faculty";
+  import { facultyTypesList } from "@/utils/api/hei/faculty";
   import { Modal } from "bootstrap";
   import { onMounted, reactive, ref, watchEffect } from "vue";
   import { useI18n } from "vue-i18n";
@@ -13,7 +13,7 @@
   const props = defineProps({
     facultyId: null,
   });
-  
+
   const emits = defineEmits<{
     (e: "update:list"): void;
   }>();
@@ -22,7 +22,7 @@
   const notif = useNotyf();
   const isLoading = ref(false);
 
-  const facultyTypeOptions = await facultyTypeList().then((res) => res.data);
+  const facultyTypeOptions = await facultyTypesList().then((res) => res.data);
 
   const formData = reactive({
     name: "",
@@ -53,7 +53,6 @@
       Object.assign(formData, res);
       notif.success(t("Data_stored_successfully"));
       emits("update:list");
-      clearFields();
       closeModal();
     } catch (error: any) {
       Object.assign(errors, error.response?.data?.message);
@@ -85,6 +84,8 @@
 
   function closeModal() {
     const modal = Modal.getOrCreateInstance("#facultyFormModal");
+    clearFields();
+    clearErrors();
     modal.hide();
   }
 </script>
@@ -103,8 +104,13 @@
           <h5 class="modal-title" id="facultyFormModalLabel">
             <span>{{ $t("Add_faculty") }}</span>
           </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal">
-            <VueIconify icon="feather:x" />
+          <button
+            type="button"
+            class="btn btn-sm btn-link"
+            data-bs-dismiss="modal"
+          >
+            <BIcon icon="x-lg" color="white" />
+            <!-- <i class="bi bi-x"></i> -->
           </button>
         </div>
         <div class="modal-body">

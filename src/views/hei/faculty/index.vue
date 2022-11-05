@@ -1,14 +1,17 @@
 <script setup lang="ts">
   import { reactive, ref, watch } from "vue";
   import Swal from "sweetalert2";
-  import { facultiesList } from "@/utils/api/hei/faculty";
+  import { facultiesList, removeFacultyById } from "@/utils/api/hei/faculty";
   import { Modal } from "bootstrap";
   import Pagination from "@/components/partials/Pagination.vue";
+  import { useI18n } from "vue-i18n";
+  import type { EmployeeInterface } from "@/utils/interfaces";
 
   const selectedId = ref<number | null>(null);
+  const { t } = useI18n();
 
   //actions delete
-  function onRemove() {
+  async function onRemove(id: number) {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: "btn btn-success",
@@ -17,28 +20,41 @@
       buttonsStyling: false,
     });
 
-    swalWithBootstrapButtons
-      .fire({
-        title: "Aminmisiz?",
-        text: "Siz buni qaytara olmaysiz!",
+    try {
+      const res = await swalWithBootstrapButtons.fire({
+        title: t("Are_you_sure"),
+        text: t("Action_irreversible"),
         icon: "warning",
-        confirmButtonText: "Ha, o'chirish!",
-        cancelButtonText: "Yo'q, bekor qilish!",
+        confirmButtonText: t("Yes, confirm the action!"),
+        cancelButtonText: t("No, cancel the action!"),
         showCancelButton: true,
-      })
-      .then((result) => {
-        if (result.value) {
-          swalWithBootstrapButtons.fire(
-            "O'chirildi!",
-            "Xabarni o'chirish muvaffaqiyatli amalga oshirildi!",
-            "success"
-          );
-        }
       });
+
+      if (res.isConfirmed) {
+        await removeFacultyById(id);
+        await fetchList();
+
+        swalWithBootstrapButtons.fire(
+          t("Removed"),
+          t("Record_deleted_successfully"),
+          "success"
+        );
+      }
+    } catch (error: any) {
+      swalWithBootstrapButtons.fire(
+        t("Something_went_wrong"),
+        error.message,
+        "error"
+      );
+    }
   }
 
   // jadval fakultet
-  const apiData = reactive({
+  const apiData: {
+    current_page: number;
+    data: EmployeeInterface[];
+    links: [];
+  } = reactive({
     current_page: 1,
     data: [],
     links: [],
@@ -81,8 +97,8 @@
                 class="btns c-save py-1.5 px-4"
                 @click="openFormModal(null)"
               >
-                <!-- <i class="fa-solid fa-plus me-2"></i> -->
-                <VueIconify icon="feather:plus" class="me-2" />
+                <!-- <i class="bi bi-plus"></i> -->
+                <BIcon icon="plus" />
                 <span>{{ $t("Add_faculty") }}</span>
               </button>
             </div>
@@ -96,10 +112,10 @@
       <div class="col-xl-12">
         <div class="card">
           <div class="card-body">
-            <div class="table-responsive">
-              <table class="content-table">
-                <thead>
-                  <tr class="table-row-fakulty">
+            <div class="table-responsive rounded-4">
+              <table class="table">
+                <thead class="text-white bg-custom-orange">
+                  <tr class="">
                     <th><strong>#</strong></th>
                     <th>
                       <strong>{{ $t("Code") }}</strong>
@@ -110,7 +126,7 @@
                     <th>
                       <strong>{{ $t("Type") }}</strong>
                     </th>
-                    <th>
+                    <th class="text-center">
                       <strong>{{ $t("Action") }}</strong>
                     </th>
                     <th>
@@ -121,7 +137,7 @@
                 <tbody>
                   <template v-if="apiData.data.length">
                     <tr
-                      class="table-row-fakulty"
+                      class=""
                       v-for="element in apiData.data"
                       :key="element.id"
                     >
@@ -130,20 +146,22 @@
                       <td>{{ element.name }}</td>
                       <td>{{ element.type }}</td>
                       <!-- ---------START ACTIONS-------------- -->
-                      <td class="">
+                      <td class="text-center">
                         <button
                           type="button"
-                          class="btn btn-link"
+                          class="btn btn-sm btn-link"
                           @click="openFormModal(element.id)"
                         >
-                          <i class="bx bx-pencil font-size-18"></i>
+                          <!-- <i class="bx bx-pencil font-size-18"></i> -->
+                          <BIcon icon="pencil" />
                         </button>
                         <button
                           type="button"
-                          class="btn btn-link text-danger"
+                          class="btn btn-sm btn-link"
                           @click="onRemove(element.id)"
                         >
-                          <i class="bx bx-trash-alt font-size-18"></i>
+                          <!-- <i class="bx bx-trash-alt font-size-18"></i> -->
+                          <BIcon icon="trash" color="danger" />
                         </button>
                       </td>
                       <!-- ---------END ACTIONS-------------- -->
@@ -169,15 +187,15 @@
                   </template>
                 </tbody>
               </table>
-              <!-------------START PAGINATION-------------->
-              <Pagination
-                v-if="apiData.data.length"
-                class="mt-2"
-                v-model:current-page="apiData.current_page"
-                :links="apiData.links"
-              />
-              <!-------------END PAGINATION-------------->
             </div>
+            <!-------------START PAGINATION-------------->
+            <Pagination
+              v-if="apiData.data.length"
+              class="mt-2"
+              v-bind="{ ...apiData }"
+              v-model:current-page="apiData.current_page"
+            />
+            <!-------------END PAGINATION-------------->
           </div>
         </div>
       </div>
@@ -191,16 +209,19 @@
 </template>
 
 <style lang="scss">
-  @import "/src/assets/scss/_screenDimensions.scss";
-  .facultyPage {
-    .table-row-fakulty {
-      width: 100% !important;
-      display: grid;
-      grid-gap: 0;
-      grid-template-columns: 50px 40px 100px auto 200px 100px 70px;
-      @include mobile() {
-        grid-template-columns: 50px 40px 100px 200px auto 80px 60px !important;
-      }
-    }
+  // @import "/src/assets/scss/_screenDimensions.scss";
+  // .facultyPage {
+  //   .table-row-fakulty {
+  //     width: 100% !important;
+  //     display: grid;
+  //     grid-gap: 0;
+  //     grid-template-columns: 50px 40px 100px auto 200px 100px 70px;
+  //     @include mobile() {
+  //       grid-template-columns: 50px 40px 100px 200px auto 80px 60px !important;
+  //     }
+  //   }
+  // }
+  .bg-custom-orange {
+    background-color: #e87525;
   }
 </style>

@@ -2,10 +2,37 @@ import { useApi } from "@/composable/useApi";
 
 const api = useApi();
 
+export async function facultiesList(payload: any) {
+  try {
+    const { data } = await api({
+      url: `/api/v1/departments/faculties`,
+      method: "GET",
+      params: payload,
+    });
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function facultyTypesList() {
+  try {
+    const { data } = await api({
+      url: `/api/v1/departments/faculties/types`,
+      method: "GET",
+    });
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function createFaculty(payload: any) {
   try {
     const { data } = await api({
-      url: `/api/v1/departments/faculty`,
+      url: `/api/v1/departments/faculties`,
       method: "POST",
       data: payload,
     });
@@ -19,7 +46,7 @@ export async function createFaculty(payload: any) {
 export async function fetchFacultyById(id: number) {
   try {
     const { data } = await api({
-      url: `/api/v1/departments/faculty/${id}`,
+      url: `/api/v1/departments/faculties/${id}`,
     });
 
     return data;
@@ -31,7 +58,7 @@ export async function fetchFacultyById(id: number) {
 export async function updateFacultyById(id: number, payload: any) {
   try {
     const { data } = await api({
-      url: `/api/v1/departments/faculty/${id}`,
+      url: `/api/v1/departments/faculties/${id}`,
       method: "PUT",
       data: payload,
     });
@@ -42,25 +69,11 @@ export async function updateFacultyById(id: number, payload: any) {
   }
 }
 
-export async function facultiesList(payload: any) {
+export async function removeFacultyById(id: number) {
   try {
     const { data } = await api({
-      url: `/api/v1/departments/faculties-list`,
-      method: "GET",
-      params: payload,
-    });
-
-    return data;
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function facultyTypeList() {
-  try {
-    const { data } = await api({
-      url: `/api/v1/departments/faculty-type-list`,
-      method: "GET",
+      url: `/api/v1/departments/faculties/${id}`,
+      method: "DELETE",
     });
 
     return data;

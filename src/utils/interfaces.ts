@@ -1,6 +1,7 @@
 export interface EmployeeInterface {
-  id: string | number;
+  id: number;
   citizenship_id: string;
+  code: string | number;
   contract_date: string;
   passport_date: string;
   pinfl: string;
@@ -28,6 +29,7 @@ export interface EmployeeInterface {
   created_at: string;
   updated_at: string;
   language: string;
+  type: string;
 }
 
 export interface EmployeeRoleInterface {
@@ -60,4 +62,3 @@ export interface HeiInterface {
   bank_information: string;
   accriditaion: string;
 }
-

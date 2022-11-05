@@ -27,15 +27,4 @@ app.use(DatePicker);
 app.use(EvaIcons);
 app.use(i18n);
 app.use(router);
-app.component(
-  "VueIconify",
-  defineAsyncComponent({
-    loader: async () => {
-      const mod = await import("@iconify/vue");
-      return mod.Icon;
-    },
-    delay: 0,
-    suspensible: false,
-  })
-);
 app.mount("#app");

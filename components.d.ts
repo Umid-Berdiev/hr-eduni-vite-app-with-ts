@@ -10,6 +10,7 @@ declare module '@vue/runtime-core' {
     AvatarInput: typeof import('./src/components/AvatarInput.vue')['default']
     BaseInput: typeof import('./src/components/forms/BaseInput.vue')['default']
     BaseSelect: typeof import('./src/components/forms/BaseSelect.vue')['default']
+    BIcon: typeof import('./src/components/icons/BIcon.vue')['default']
     ChangeAccountFormCard: typeof import('./src/components/cards/ChangeAccountFormCard.vue')['default']
     Default: typeof import('./src/layouts/default.vue')['default']
     EmployeeConnectCard: typeof import('./src/components/cards/EmployeeConnectCard.vue')['default']
