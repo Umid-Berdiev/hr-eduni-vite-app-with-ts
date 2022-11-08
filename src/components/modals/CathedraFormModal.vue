@@ -1,4 +1,7 @@
 <script setup lang="ts">
+  import { onMounted, reactive, ref, watchEffect } from "vue";
+  import { useI18n } from "vue-i18n";
+  import { Modal } from "bootstrap";
   import { useNotyf } from "@/composable/useNotyf";
   import {
     createCathedra,
@@ -6,9 +9,6 @@
     updateCathedraById,
     facultiesList,
   } from "@/utils/api/hei/cathedra";
-  import { Modal } from "bootstrap";
-  import { reactive, ref, watchEffect } from "vue";
-  import { useI18n } from "vue-i18n";
 
   const props = defineProps({
     cathedraId: null,
@@ -24,24 +24,34 @@
   const isLoading = ref(false);
 
   const facultyOptions = await facultiesList().then((res) => res.data);
-  const selectedFacultyId = ref<number | null>(null);
 
   const formData = reactive({
     name: "",
     code: "",
-    faculty_id: null,
+    department_id: null,
   });
 
   const errors = reactive({
     name: [],
     code: [],
-    faculty_id: [],
+    department_id: [],
+  });
+  const modal = ref<Element>();
+
+  onMounted(() => {
+    const modalEl = document.getElementById("cathedraFormModal") as Element;
+    modalEl?.addEventListener("hidden.bs.modal", (event) => {
+      // do something...
+      clearFields();
+      clearErrors();
+      emits("close");
+    });
   });
 
   watchEffect(async () => {
     if (props.cathedraId) {
       const res = await fetchCathedraById(props.cathedraId);
-      Object.assign(formData, res);
+      Object.assign(formData, res.data);
     }
   });
 
@@ -50,13 +60,13 @@
       isLoading.value = true;
       clearErrors();
       const res = props.cathedraId
-        ? await updateCathedraById(props.cathedraId, values)
-        : await createCathedra(values);
+        ? await updateCathedraById(props.cathedraId, formData)
+        : await createCathedra(formData);
       Object.assign(formData, res);
       notif.success(t("Data_stored_successfully"));
       emits("update:list");
       closeModal();
-    } catch (cathedra: any) {
+    } catch (error: any) {
       Object.assign(errors, error.response?.data?.message);
       notif.error(t("Failed") + ": " + error.message);
     } finally {
@@ -64,15 +74,11 @@
     }
   }
 
-  const onFinishFailed = (errorInfo: string) => {
-    console.log({ errorInfo });
-  };
-
   function clearFields() {
     Object.assign(formData, {
       name: "",
       code: "",
-      faculty_id: null,
+      department_id: null,
     });
   }
 
@@ -80,31 +86,28 @@
     Object.assign(errors, {
       name: [],
       code: [],
-      faculty_id: [],
+      department_id: [],
     });
   }
 
   function closeModal() {
-    const modal = Modal.getOrCreateInstance("#facultyFormModal");
-    clearFields();
-    clearErrors();
-    emits("close");
+    const modal = Modal.getOrCreateInstance("#cathedraFormModal");
     modal.hide();
   }
 </script>
 
 <template>
   <div
-    id="facultyFormModal"
+    id="cathedraFormModal"
     class="modal fade"
     tabindex="-1"
-    aria-labelledby="facultyFormModalLabel"
+    aria-labelledby="cathedraFormModalLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header bg-card-header">
-          <h5 class="modal-title" id="facultyFormModalLabel">
+          <h5 class="modal-title" id="cathedraFormModalLabel">
             <span>{{ $t("Add_faculty") }}</span>
           </h5>
           <button type="button" class="btn btn-sm btn-link" @click="closeModal">
@@ -119,7 +122,7 @@
               </label>
               <a-select
                 id="cathedra-faculty"
-                v-model:value="formData.faculty_id"
+                v-model:value="formData.department_id"
                 :options="facultyOptions"
                 :field-names="{ value: 'id', label: 'name' }"
               >
@@ -144,6 +147,9 @@
                 v-model:value="formData.code"
                 :placeholder="$t('Enter_code')"
               />
+              <span v-if="errors.code" class="text-danger small">
+                {{ errors.code[0] }}
+              </span>
             </div>
             <div class="d-flex justify-content-end gap-2 mt-3">
               <button type="button" class="btns c-cancel" @click="closeModal">

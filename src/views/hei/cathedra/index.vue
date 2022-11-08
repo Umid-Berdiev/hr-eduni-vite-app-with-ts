@@ -1,16 +1,12 @@
 <script setup lang="ts">
-  import { reactive, ref, watch } from "vue";
+  import { onMounted, reactive, ref, watch } from "vue";
   import { useI18n } from "vue-i18n";
   import Swal from "sweetalert2";
   import { Modal } from "bootstrap";
   import { useNotyf } from "@/composable/useNotyf";
   import type { CathedraInterface } from "@/utils/interfaces";
-  import {
-    cathedrasList,
-    facultiesList,
-    updateCathedraById,
-  } from "@/utils/api/hei/cathedra";
-  import { deleteDepartment } from "@/utils/api/hei/department";
+  import { cathedrasList, facultiesList } from "@/utils/api/hei/cathedra";
+  import { changeStatus, deleteDepartment } from "@/utils/api/hei/department";
 
   const selectedId = ref<number | null>(null);
   const { t } = useI18n();
@@ -47,12 +43,12 @@
 
   async function fetchList(page: number = 1) {
     const res = await cathedrasList({ page });
-    Object.assign(apiData, res);
+    Object.assign(apiData, res.data);
   }
 
   function openFormModal(id: number | null) {
     selectedId.value = id;
-    const modal = Modal.getOrCreateInstance("#facultyFormModal");
+    const modal = Modal.getOrCreateInstance("#cathedraFormModal");
     modal.show();
   }
 
@@ -101,6 +97,19 @@
 
   function onSearch() {
     console.log({ searchForm });
+  }
+
+  async function updateStatus(id: number) {
+    try {
+      isLoading.value = true;
+      await changeStatus(id);
+      await fetchList();
+      notif.success("Data_stored_successfully");
+    } catch (error: any) {
+      notif.error(error.message);
+    } finally {
+      isLoading.value = false;
+    }
   }
 </script>
 
@@ -211,7 +220,7 @@
                       <td>{{ element.id }}</td>
                       <td>{{ element.code }}</td>
                       <td>{{ element.name }}</td>
-                      <td>{{ element.faculty }}</td>
+                      <td>{{ element.faculty?.name }}</td>
                       <!-- ---------START ACTIONS-------------- -->
                       <td class="text-center">
                         <button
@@ -274,7 +283,7 @@
 
     <!-------START MODAL---------------------------------------->
     <CathedraFormModal
-      :faculty-id="selectedId"
+      :cathedra-id="selectedId"
       @update:list="fetchList"
       @close="onModalClose"
     />

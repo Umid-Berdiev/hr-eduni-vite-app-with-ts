@@ -1,9 +1,9 @@
 <script setup lang="ts">
   const props = withDefaults(
     defineProps<{
-      color: string;
+      color?: string;
       icon: string;
-      size: string;
+      size?: string;
     }>(),
     {
       color: "",

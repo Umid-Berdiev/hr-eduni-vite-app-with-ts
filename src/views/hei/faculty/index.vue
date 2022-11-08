@@ -1,15 +1,12 @@
 <script setup lang="ts">
-  import { reactive, ref, watch } from "vue";
+  import { onMounted, reactive, ref, watch } from "vue";
   import { useI18n } from "vue-i18n";
   import Swal from "sweetalert2";
   import { Modal } from "bootstrap";
   import { useNotyf } from "@/composable/useNotyf";
   import type { FacultyInterface } from "@/utils/interfaces";
-  import {
-    facultiesList,
-    removeFacultyById,
-    updateFacultyStatus,
-  } from "@/utils/api/hei/faculty";
+  import { facultiesList } from "@/utils/api/hei/faculty";
+  import { changeStatus, deleteDepartment } from "@/utils/api/hei/department";
 
   const selectedId = ref<number | null>(null);
   const { t } = useI18n();
@@ -52,7 +49,7 @@
   async function updateStatus(id: number) {
     try {
       isLoading.value = true;
-      await updateFacultyStatus(id);
+      await changeStatus(id);
       await fetchList();
       notif.success("Data_stored_successfully");
     } catch (error: any) {
@@ -83,7 +80,7 @@
       });
 
       if (res.isConfirmed) {
-        await removeFacultyById(id);
+        await deleteDepartment(id);
         await fetchList();
 
         swalWithBootstrapButtons.fire(

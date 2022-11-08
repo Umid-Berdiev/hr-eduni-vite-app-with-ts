@@ -172,6 +172,14 @@ export default [
         // },
       },
       {
+        path: "/messages/grid",
+        name: "messages-grid",
+        component: () => import("@/views/messages/grid.vue"), //xabar yaratish
+        // meta: {
+        //   requiresAuth: true,
+        // },
+      },
+      {
         path: "/messages/index",
         name: "messages",
         component: () => import("@/views/messages/index.vue"), //mening xabarlarim

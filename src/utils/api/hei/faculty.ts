@@ -68,29 +68,3 @@ export async function updateFacultyById(id: number, payload: any) {
     throw error;
   }
 }
-
-export async function updateFacultyStatus(id: number) {
-  try {
-    const { data } = await api({
-      url: `/api/v1/departments/${id}/status`,
-      method: "PUT",
-    });
-
-    return data;
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function removeFacultyById(id: number) {
-  try {
-    const { data } = await api({
-      url: `/api/v1/departments/${id}`,
-      method: "DELETE",
-    });
-
-    return data;
-  } catch (error) {
-    throw error;
-  }
-}

@@ -22,7 +22,6 @@
   const { t } = useI18n();
   const notif = useNotyf();
   const isLoading = ref(false);
-
   const facultyTypeOptions = await facultyTypesList().then((res) => res.data);
 
   const formData = reactive({
@@ -35,6 +34,15 @@
     name: [],
     code: [],
     department_type_id: [],
+  });
+
+  onMounted(() => {
+    const modalEl = document.getElementById("facultyFormModal") as Element;
+    modalEl?.addEventListener("hidden.bs.modal", (event) => {
+      clearFields();
+      clearErrors();
+      emits("close");
+    });
   });
 
   watchEffect(async () => {
@@ -85,9 +93,6 @@
 
   function closeModal() {
     const modal = Modal.getOrCreateInstance("#facultyFormModal");
-    clearFields();
-    clearErrors();
-    emits("close");
     modal.hide();
   }
 </script>

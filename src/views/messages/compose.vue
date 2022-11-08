@@ -1,8 +1,7 @@
-<script setup>
-  import CKEditor from "@ckeditor/ckeditor5-vue";
-  import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+<script setup lang="ts">
   import { ref } from "vue";
-  import Layout from "../../layouts/main";
+  // import CKEditor from "@ckeditor/ckeditor5-vue";
+  // import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
   //table xodimlar
   const objEmployees = [
@@ -86,6 +85,7 @@
     { value: "Gumanitar fanlar" },
     { value: "O'quv uslubiy boshqarma" },
   ]);
+
   //guruxlar
   const optionsGroup = ref([
     { value: "TAR-20/1" },
@@ -94,24 +94,6 @@
     { value: "TAR-20/1" },
     { value: "TAR-20/1" },
   ]);
-  // const showDeleteConfirm = () => {
-  //   Modal.confirm({
-  //     title: "Siz rostdan shu bo'limni o'chirmoqchimisiz?",
-  //     icon: createVNode(ExclamationCircleOutlined),
-  //     content: "",
-  //     okText: "Ha",
-  //     okType: "danger",
-  //     cancelText: "Yo'q",
-
-  //     onOk() {
-  //       console.log("OK");
-  //     },
-
-  //     onCancel() {
-  //       console.log("Cancel");
-  //     },
-  //   });
-  // };
 </script>
 
 <template>

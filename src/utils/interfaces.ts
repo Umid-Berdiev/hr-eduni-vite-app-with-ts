@@ -80,7 +80,7 @@ export interface CathedraInterface {
   code: string | number;
   department_type_id: string | number;
   faculty_id: string | number;
-  faculty: string;
+  faculty: FacultyInterface;
   id: string | number;
   name: {
     uz: string;

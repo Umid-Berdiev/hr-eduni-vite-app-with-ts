@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import Topbar from "@/components/Topbar.vue";
-  import SideBar from "@/components/SideBar.vue";
+  import Sidebar from "@/components/Sidebar.vue";
   import Footer from "@/components/Footer.vue";
   import { useRouter } from "vue-router";
   import { useLayoutStore } from "@/stores/layout";
@@ -63,7 +63,7 @@
   <div id="layout-wrapper">
     <Topbar @toggle-menu="toggleMenu" />
 
-    <SideBar
+    <Sidebar
       :type="leftSidebarType"
       :width="layoutWidth"
       :color="sidebarColor"
