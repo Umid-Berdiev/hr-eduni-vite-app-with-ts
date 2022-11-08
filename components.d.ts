@@ -21,6 +21,7 @@ declare module '@vue/runtime-core' {
     FacultyFormModal: typeof import('./src/components/modals/FacultyFormModal.vue')['default']
     Footer: typeof import('./src/components/Footer.vue')['default']
     HeiEditFormModal: typeof import('./src/components/modals/HeiEditFormModal.vue')['default']
+    HeiSectionFormModal: typeof import('./src/components/modals/HeiSectionFormModal.vue')['default']
     HelloI18n: typeof import('./src/components/HelloI18n.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     HorizontalNav: typeof import('./src/components/HorizontalNav.vue')['default']

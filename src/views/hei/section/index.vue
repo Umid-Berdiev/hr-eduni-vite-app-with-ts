@@ -4,8 +4,8 @@
   import Swal from "sweetalert2";
   import { Modal } from "bootstrap";
   import { useNotyf } from "@/composable/useNotyf";
-  import type { CathedraInterface } from "@/utils/interfaces";
-  import { cathedrasList, facultiesList } from "@/utils/api/hei/cathedra";
+  import type { SectionInterface } from "@/utils/interfaces";
+  import { sectionsList, sectionTypeList } from "@/utils/api/hei/section";
   import { changeStatus, deleteDepartment } from "@/utils/api/hei/department";
 
   const selectedId = ref<number | null>(null);
@@ -13,12 +13,12 @@
   const notif = useNotyf();
   const isLoading = ref(false);
 
-  const facultyOptions = await facultiesList().then((res) => res.data);
+  const departmentTypeOptions = await sectionTypeList().then((res) => res.data);
 
   // jadval fakultet
   const apiData: {
     current_page: number;
-    data: CathedraInterface[];
+    data: SectionInterface[];
     links: [];
   } = reactive({
     current_page: 1,
@@ -27,7 +27,7 @@
   });
 
   const apiParams = reactive({
-    faculty_id: null,
+    department_type_id: null,
     name: "",
     page: 1,
   });
@@ -45,13 +45,13 @@
   );
 
   async function fetchList() {
-    const res = await cathedrasList(apiParams);
+    const res = await sectionsList(apiParams);
     Object.assign(apiData, res.data);
   }
 
   function openFormModal(id: number | null) {
     selectedId.value = id;
-    const modal = Modal.getOrCreateInstance("#cathedraFormModal");
+    const modal = Modal.getOrCreateInstance("#sectionFormModal");
     modal.show();
   }
 
@@ -117,12 +117,12 @@
 </script>
 
 <template>
-  <div class="departmentPage">
+  <div class="sectionPage">
     <!-----------START PAGE LIST HEADER TOP ------------------------>
     <div class="card panel-header-bg">
       <div class="card-body">
         <div class="panel-header">
-          <h5 class="card-title">{{ $t("Hei_cathedra") }}</h5>
+          <h5 class="card-title">{{ $t("Hei_section") }}</h5>
           <div class="panel-toggles gap-3">
             <button
               type="button"
@@ -130,7 +130,7 @@
               @click="openFormModal(null)"
             >
               <BIcon icon="plus" />
-              <span>{{ $t("Add_cathedra") }}</span>
+              <span>{{ $t("Add_section") }}</span>
             </button>
             <button v-b-toggle.collapse-3 class="btns c-filter py-1.5 px-4">
               <BIcon icon="filter" />
@@ -155,13 +155,13 @@
             <div class="my-2 col-xl-5 form--item">
               <a-space>
                 <a-select
-                  v-model:value="apiParams.faculty_id"
-                  :options="facultyOptions"
+                  v-model:value="apiParams.department_type_id"
+                  :options="departmentTypeOptions"
                   :field-names="{ value: 'id', label: 'name' }"
                   allowClear
                 ></a-select>
               </a-space>
-              <label for="yu">{{ $t("Select_faculty") }}</label>
+              <label for="yu">{{ $t("Select_type") }}</label>
             </div>
             <div class="my-2 col-xl-5 form--item">
               <a-space>
@@ -201,7 +201,7 @@
                       <strong>{{ $t("Name") }}</strong>
                     </th>
                     <th>
-                      <strong>{{ $t("Faculty") }}</strong>
+                      <strong>{{ $t("Section_type") }}</strong>
                     </th>
                     <th class="text-center">
                       <strong>{{ $t("Action") }}</strong>
@@ -221,7 +221,7 @@
                       <td>{{ element.id }}</td>
                       <td>{{ element.code }}</td>
                       <td>{{ element.name }}</td>
-                      <td>{{ element.faculty?.name }}</td>
+                      <td>{{ element.type?.name }}</td>
                       <!-- ---------START ACTIONS-------------- -->
                       <td class="text-center">
                         <button
@@ -283,8 +283,8 @@
     <!-------END TABLE---------------------------------------->
 
     <!-------START MODAL---------------------------------------->
-    <CathedraFormModal
-      :cathedra-id="selectedId"
+    <HeiSectionFormModal
+      :section-id="selectedId"
       @update:list="fetchList"
       @close="onModalClose"
     />
@@ -294,7 +294,7 @@
 
 <style lang="scss">
   // @import "/src/assets/scss/_screenDimensions.scss";
-  // .departmentPage {
+  // .sectionPage {
   //   .table-row-division {
   //     display: grid;
   //     width: 100% !important;

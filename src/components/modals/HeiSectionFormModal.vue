@@ -4,14 +4,14 @@
   import { Modal } from "bootstrap";
   import { useNotyf } from "@/composable/useNotyf";
   import {
-    createCathedra,
-    updateCathedraById,
-    facultiesList,
-  } from "@/utils/api/hei/cathedra";
+    createSection,
+    updateSectionById,
+    sectionTypeList,
+  } from "@/utils/api/hei/section";
   import { fetchDepartmentById } from "@/utils/api/hei/department";
 
   const props = defineProps({
-    cathedraId: null,
+    sectionId: null,
   });
 
   const emits = defineEmits<{
@@ -23,23 +23,23 @@
   const notif = useNotyf();
   const isLoading = ref(false);
 
-  const facultyOptions = await facultiesList().then((res) => res.data);
+  const departmentTypeOptions = await sectionTypeList().then((res) => res.data);
 
   const formData = reactive({
     name: "",
     code: "",
-    department_id: null,
+    department_type_id: null,
   });
 
   const errors = reactive({
     name: [],
     code: [],
-    department_id: [],
+    department_type_id: [],
   });
   const modal = ref<Element>();
 
   onMounted(() => {
-    const modalEl = document.getElementById("cathedraFormModal") as Element;
+    const modalEl = document.getElementById("sectionFormModal") as Element;
     modalEl?.addEventListener("hidden.bs.modal", (event) => {
       // do something...
       clearFields();
@@ -49,8 +49,8 @@
   });
 
   watchEffect(async () => {
-    if (props.cathedraId) {
-      const res = await fetchDepartmentById(props.cathedraId);
+    if (props.sectionId) {
+      const res = await fetchDepartmentById(props.sectionId);
       Object.assign(formData, res.data);
     }
   });
@@ -59,9 +59,9 @@
     try {
       isLoading.value = true;
       clearErrors();
-      const res = props.cathedraId
-        ? await updateCathedraById(props.cathedraId, formData)
-        : await createCathedra(formData);
+      const res = props.sectionId
+        ? await updateSectionById(props.sectionId, formData)
+        : await createSection(formData);
       Object.assign(formData, res);
       notif.success(t("Data_stored_successfully"));
       emits("update:list");
@@ -78,7 +78,7 @@
     Object.assign(formData, {
       name: "",
       code: "",
-      department_id: null,
+      department_type_id: null,
     });
   }
 
@@ -86,29 +86,29 @@
     Object.assign(errors, {
       name: [],
       code: [],
-      department_id: [],
+      department_type_id: [],
     });
   }
 
   function closeModal() {
-    const modal = Modal.getOrCreateInstance("#cathedraFormModal");
+    const modal = Modal.getOrCreateInstance("#sectionFormModal");
     modal.hide();
   }
 </script>
 
 <template>
   <div
-    id="cathedraFormModal"
+    id="sectionFormModal"
     class="modal fade"
     tabindex="-1"
-    aria-labelledby="cathedraFormModalLabel"
+    aria-labelledby="sectionFormModalLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header bg-card-header">
-          <h5 class="modal-title" id="cathedraFormModalLabel">
-            <span>{{ $t("Add_faculty") }}</span>
+          <h5 class="modal-title" id="sectionFormModalLabel">
+            <span>{{ $t("Add_section") }}</span>
           </h5>
           <button type="button" class="btn btn-sm btn-link" @click="closeModal">
             <BIcon icon="x-lg" color="white" />
@@ -117,33 +117,39 @@
         <div class="modal-body">
           <form @submit.prevent="onSubmit">
             <div class="mb-3">
-              <label for="cathedra-faculty" class="form-label fw-bold">
-                {{ $t("Select_faculty") }}
+              <label for="section-type" class="form-label fw-bold">
+                {{ $t("Select_type") }}
               </label>
               <a-select
-                id="cathedra-faculty"
-                v-model:value="formData.department_id"
-                :options="facultyOptions"
+                id="section-type"
+                v-model:value="formData.department_type_id"
+                :options="departmentTypeOptions"
                 :field-names="{ value: 'id', label: 'name' }"
               >
               </a-select>
+              <span v-if="errors.department_type_id" class="text-danger small">
+                {{ errors.department_type_id[0] }}
+              </span>
             </div>
             <div class="mb-3">
-              <label for="cathedra-name" class="form-label fw-bold">
+              <label for="section-name" class="form-label fw-bold">
                 {{ $t("Name") }}
               </label>
               <a-input
-                id="cathedra-name"
+                id="section-name"
                 v-model:value="formData.name"
                 :placeholder="$t('Enter_name')"
               />
+              <span v-if="errors.name" class="text-danger small">
+                {{ errors.name[0] }}
+              </span>
             </div>
             <div class="mb-3">
-              <label for="cathedra-code" class="form-label fw-bold">
+              <label for="section-code" class="form-label fw-bold">
                 {{ $t("Code") }}
               </label>
               <a-input
-                id="cathedra-code"
+                id="section-code"
                 v-model:value="formData.code"
                 :placeholder="$t('Enter_code')"
               />

@@ -2,10 +2,10 @@ import { useApi } from "@/composable/useApi";
 
 const api = useApi();
 
-export async function departmentTypeList() {
+export async function sectionTypeList() {
   try {
     const { data } = await api({
-      url: `/api/v1/departments/section-type-list`,
+      url: `/api/v1/departments/sections/types`,
       method: "GET",
     });
 
@@ -15,10 +15,10 @@ export async function departmentTypeList() {
   }
 }
 
-export async function sectionsList(payload) {
+export async function sectionsList(payload: any) {
   try {
     const { data } = await api({
-      url: `/api/v1/departments/sections-list`,
+      url: `/api/v1/departments/sections`,
       method: "GET",
       params: payload,
     });
@@ -29,10 +29,10 @@ export async function sectionsList(payload) {
   }
 }
 
-export async function createSection(payload) {
+export async function createSection(payload: any) {
   try {
     const { data } = await api({
-      url: `/api/v1/departments/create-section`,
+      url: `/api/v1/departments/sections`,
       method: "POST",
       data: payload,
     });
@@ -43,11 +43,11 @@ export async function createSection(payload) {
   }
 }
 
-export async function updateSection(id, payload) {
+export async function updateSectionById(id: number, payload: any) {
   try {
     const { data } = await api({
-      url: `/api/v1/departments/update-section/${id}`,
-      method: "POST",
+      url: `/api/v1/departments/sections/${id}`,
+      method: "PUT",
       data: payload,
     });
 

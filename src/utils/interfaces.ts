@@ -90,3 +90,16 @@ export interface CathedraInterface {
   status: boolean;
   type: string;
 }
+
+export interface SectionInterface {
+  code: string | number;
+  department_type_id: string | number;
+  id: string | number;
+  name: {
+    uz: string;
+    ru: string;
+    en: string;
+  };
+  status: boolean;
+  type: string;
+}

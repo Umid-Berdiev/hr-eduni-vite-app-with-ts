@@ -2,11 +2,10 @@ import { useApi } from "@/composable/useApi";
 
 const api = useApi();
 
-export async function getDepartment(id: number) {
+export async function fetchDepartmentById(id: number) {
   try {
     const { data } = await api({
       url: `/api/v1/departments/${id}`,
-      method: "GET",
     });
 
     return data;

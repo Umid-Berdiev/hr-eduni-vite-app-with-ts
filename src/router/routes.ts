@@ -47,9 +47,9 @@ export default [
         // },
       },
       {
-        path: "/hei/division",
-        name: "hei-division",
-        component: () => import("@/views/hei/division/index.vue"), // bo'lim
+        path: "/hei/section",
+        name: "hei-section",
+        component: () => import("@/views/hei/section/index.vue"), // bo'lim
         // meta: {
         //   requiresAuth: true,
         // },

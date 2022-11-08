@@ -29,18 +29,6 @@ export async function createCathedra(payload: any) {
   }
 }
 
-export async function fetchCathedraById(id: number) {
-  try {
-    const { data } = await api({
-      url: `/api/v1/departments/${id}`,
-    });
-
-    return data;
-  } catch (error) {
-    throw error;
-  }
-}
-
 export async function updateCathedraById(id: number, payload: any) {
   try {
     const { data } = await api({
